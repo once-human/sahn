@@ -5,36 +5,6 @@ import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import NotebookOverlay from "@/components/NotebookOverlay";
 
-// ── Cinematic animation variants ────────────────────────────────────────────
-
-const wordVariants = {
-  hidden: { opacity: 0, filter: "blur(16px)", y: 14 },
-  visible: (i: number) => ({
-    opacity: 1,
-    filter: "blur(0px)",
-    y: 0,
-    transition: {
-      delay: 0.06 * i,
-      duration: 0.95,
-      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-    },
-  }),
-};
-
-const lineVariants = {
-  hidden: { opacity: 0, filter: "blur(10px)", y: 10 },
-  visible: (i: number) => ({
-    opacity: 1,
-    filter: "blur(0px)",
-    y: 0,
-    transition: {
-      delay: 0.55 + 0.14 * i,
-      duration: 0.85,
-      ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
-    },
-  }),
-};
-
 const notebookVariants = {
   hidden: { opacity: 0, scale: 1.116, filter: "blur(28px)" }, // 0.93 * 1.2 = 1.116
   visible: {
@@ -48,33 +18,6 @@ const notebookVariants = {
     },
   },
 };
-
-// ── Animated headline ────────────────────────────────────────────────────────
-
-function BlurWord({ word, index }: { word: string; index: number }) {
-  return (
-    <motion.span
-      custom={index}
-      variants={wordVariants}
-      initial="hidden"
-      animate="visible"
-      className="inline-block"
-      style={{ marginRight: "0.22em" }}
-    >
-      {word}
-    </motion.span>
-  );
-}
-
-function AnimatedHeadline({ text }: { text: string }) {
-  return (
-    <>
-      {text.split(" ").map((w, i) => (
-        <BlurWord key={i} word={w} index={i} />
-      ))}
-    </>
-  );
-}
 
 // ── Main Component ───────────────────────────────────────────────────────────
 
@@ -120,7 +63,7 @@ export default function Hero() {
           onMouseLeave={() => setIsPopupOpen(false)}
           onClick={() => setIsPopupOpen(!isPopupOpen)}
         >
-          <div className="font-sans text-[16px] uppercase tracking-[0.65em] font-medium text-[#C9A470] cursor-pointer transition-opacity hover:opacity-80">
+          <div className="font-sans text-[12px] uppercase tracking-[0.65em] font-medium text-[#F5F1EB] opacity-90 cursor-pointer transition-opacity hover:opacity-100">
             S A H N
           </div>
           
@@ -134,8 +77,8 @@ export default function Hero() {
                 className="absolute top-[100%] left-0 mt-4 w-[280px] p-5 rounded-[20px] bg-[rgba(255,255,255,0.05)] backdrop-blur-3xl backdrop-saturate-[180%] border border-[rgba(255,255,255,0.15)] shadow-[0_24px_48px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.25)] z-[120] pointer-events-auto cursor-default"
                 onClick={(e) => e.stopPropagation()}
               >
-                <h4 className="font-serif text-[#C9A470] text-xl mb-3">Why SAHN?</h4>
-                <div className="flex flex-col gap-3 font-sans text-[13px] text-[#F3ECE5]/80 leading-[1.6]">
+                <h4 className="font-serif text-[#F5F1EB] text-xl mb-3">Why SAHN?</h4>
+                <div className="flex flex-col gap-3 font-sans text-[13px] text-[#A79D95] leading-[1.6]">
                   <p>
                     A sahn is traditionally the open courtyard at the heart of a place, a space where people gather, meet, exchange ideas and begin something together.
                   </p>
@@ -147,6 +90,19 @@ export default function Hero() {
             )}
           </AnimatePresence>
         </div>
+
+        <nav className="hidden lg:flex items-center gap-10 font-sans text-[12px] pointer-events-auto text-[#A79D95]">
+          <a href="#" className="opacity-60 hover:opacity-100 transition-opacity">
+            About
+          </a>
+          <a
+            href="#"
+            className="flex items-center gap-[8px] border border-[rgba(199,160,106,0.35)] px-[18px] py-[10px] rounded-full hover:border-[rgba(199,160,106,0.6)] transition-colors duration-300"
+          >
+            <span className="opacity-80 text-[#F5F1EB]">Get in Touch</span>
+            <span className="w-[4px] h-[4px] rounded-full bg-[#C7A06A] block" />
+          </a>
+        </nav>
       </motion.header>
 
       {/* ── Main Content ── */}
@@ -160,32 +116,18 @@ export default function Hero() {
 
         {/* Left Column */}
         <div className="w-full lg:w-[45%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-[5%] pt-10 lg:pb-0 pb-12 z-20">
-          <h1 className="font-serif text-[#F3ECE5] text-[3.2rem] sm:text-[3.6rem] lg:text-[4rem] xl:text-[4.2rem] leading-[1.05] font-[500] tracking-tight mb-8 w-full sm:w-[120%] lg:w-[140%] max-w-[800px]">
-            <AnimatedHeadline text="Structured Vendor Sourcing for Events" />
+          <h1 className="font-serif text-[#F5F1EB] text-[72px] lg:text-[80px] leading-[1.05] font-medium tracking-tight w-full sm:w-[120%] lg:w-[140%] max-w-[800px]">
+            Structured Vendor <span className="text-[#C7A06A]">Sourcing</span> for Events
           </h1>
 
-          <div className="flex flex-col text-[#F3ECE5] font-sans max-w-[32rem]">
-            <motion.p
-              custom={0}
-              variants={lineVariants}
-              initial="hidden"
-              animate="visible"
-              className="opacity-[65%] text-[1.05rem] leading-[1.6]"
-            >
+          <div className="flex flex-col font-sans max-w-[32rem] mt-14">
+            <p className="text-[#A79D95] text-[18px] leading-[1.6]">
               One place to source, compare and coordinate the people behind your next event.
-            </motion.p>
+            </p>
             
-            <div className="h-6" />
-            
-            <motion.p
-              custom={1}
-              variants={lineVariants}
-              initial="hidden"
-              animate="visible"
-              className="opacity-[28%] text-[0.8rem] leading-[2]"
-            >
-              Photography &bull; AV &bull; Venues &bull; Production &bull; Hospitality &bull; Catering &bull; Merchandise
-            </motion.p>
+            <p className="text-[#857A72] text-[12px] uppercase tracking-[0.18em] font-medium mt-8">
+              PHOTOGRAPHY &middot; AV &middot; VENUES &middot; PRODUCTION &middot; HOSPITALITY &middot; CATERING &middot; MERCHANDISE
+            </p>
           </div>
         </div>
 

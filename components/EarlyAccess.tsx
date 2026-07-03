@@ -37,13 +37,13 @@ export default function EarlyAccess() {
   };
 
   return (
-    <section className="w-full text-[#F3ECE5] px-12 py-32 flex flex-col items-center justify-center">
+    <section className="w-full px-12 py-48 flex flex-col items-center justify-center relative z-20">
       <div className="w-full max-w-[600px] text-center">
-        <h2 className="font-serif text-[2.5rem] leading-[1.2] font-[500] tracking-tight mb-4">
+        <h2 className="font-sans text-[18px] text-[#F5F1EB] leading-[1.6] mb-4">
           Starting with Pune and Bengaluru.
         </h2>
-        <p className="text-[15px] text-[#F3ECE5] opacity-[58%] mb-12">
-          Be part of the first community.
+        <p className="text-[12px] text-[#A79D95] uppercase tracking-[0.18em] mb-16 font-medium">
+          Be part of the first community
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center justify-center gap-6 max-w-[500px] mx-auto relative">
@@ -55,10 +55,10 @@ export default function EarlyAccess() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={status === "loading" || status === "success"}
-              className="w-full bg-transparent border-b border-[#3A2E25] px-2 py-3 text-[15px] text-[#F3ECE5] placeholder:text-[#F3ECE5] placeholder:opacity-[30%] focus:outline-none focus:border-[#F3ECE5]/50 transition-colors disabled:opacity-50"
+              className="w-full bg-transparent border-b border-[rgba(199,160,106,0.25)] px-2 py-4 text-[18px] text-[#F5F1EB] placeholder:text-[#A79D95] placeholder:opacity-50 focus:outline-none focus:border-[rgba(199,160,106,0.5)] transition-colors disabled:opacity-50"
             />
             {message && (
-              <p className={`absolute -bottom-8 left-0 text-[13px] ${status === 'success' ? 'text-[#C9A470]' : 'text-red-400'}`}>
+              <p className={`absolute -bottom-8 left-0 text-[12px] ${status === 'success' ? 'text-[#C7A06A]' : 'text-red-400'}`}>
                 {message}
               </p>
             )}
@@ -67,16 +67,16 @@ export default function EarlyAccess() {
           <button
             type="submit"
             disabled={status === "loading" || status === "success"}
-            className="group inline-flex items-center text-[#F3ECE5] text-[15px] font-medium relative pt-2"
+            className="group inline-flex items-center text-[#F5F1EB] text-[18px] relative pt-2"
           >
             <span className="relative pb-1">
               {status === "loading" ? "Joining..." : status === "success" ? "Joined" : "Join waitlist"}
               {status === "idle" && (
-                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#F3ECE5]/30 origin-left transition-transform duration-400 ease-out group-hover:scale-x-110" />
+                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[rgba(199,160,106,0.35)] origin-left transition-transform duration-400 ease-out group-hover:scale-x-110" />
               )}
             </span>
             {status === "idle" && (
-              <span className="ml-4 transform transition-transform duration-400 ease-out group-hover:translate-x-[4px] inline-block font-serif text-lg pb-1">
+              <span className="ml-4 transform transition-transform duration-400 ease-out group-hover:translate-x-[4px] inline-block font-serif text-[18px] pb-1 text-[#C7A06A]">
                 →
               </span>
             )}

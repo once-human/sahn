@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #070707;
-  --color-foreground: #F3ECE5;
+  --color-background: #0A0A0A;
+  --color-foreground: #F5F1EB;
   --font-sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-serif: var(--font-cormorant), "Cormorant Garamond", "Cormorant", "Playfair Display", "Didot", "Georgia", serif;
   --font-handwriting: var(--font-shadows-into-light), var(--font-patrick-hand), "Shadows Into Light", "Patrick Hand", cursive;
 }
 
 body {
-  background-color: #070707;
+  background-color: #0A0A0A;
   color: var(--color-foreground);
   font-family: var(--font-sans), sans-serif;
   overflow-x: hidden;
@@ -20,7 +20,7 @@ body {
   inset: 0;
   z-index: -10;
   pointer-events: none;
-  background-color: #070707; /* Layer 1 */
+  background-color: #0A0A0A; /* Layer 1 */
 }
 
 /* Layer 2: Radial light (neutral dark vignette) */
