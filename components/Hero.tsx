@@ -90,7 +90,7 @@ export default function Hero() {
         <div className="w-[58%] h-full relative flex items-center justify-center pt-8">
           <motion.div 
             style={{ x, y }} 
-            className="relative w-[240%] max-w-[2160px] aspect-[4/3] flex-shrink-0"
+            className="relative w-[125%] max-w-[950px] aspect-[4/3] flex-shrink-0"
           >
             <motion.div
               animate={{ y: [-2, 2, -2] }}
