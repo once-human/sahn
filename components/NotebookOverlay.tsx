@@ -26,11 +26,11 @@ const F1 = "var(--font-shadows-into-light), 'Shadows Into Light', cursive";
 // Person 2 — Friend (Patrick Hand: casual, rounder, warm)
 const F2 = "var(--font-patrick-hand), 'Patrick Hand', cursive";
 
-const FS1      = "clamp(10px, 1.05vw, 13.5px)";   // body — person 1
-const FS2      = "clamp(9.5px, 1.0vw, 13px)";      // body — person 2
-const FS_HEAD  = "clamp(13px, 1.4vw, 18px)";        // static heading
-const FS_SUB   = "clamp(10px, 1.0vw, 13px)";        // static sub-lines
-const FS_MARGIN = "clamp(6px, 0.58vw, 7.5px)";      // margin note
+const FS1      = "clamp(6px, 0.65vw, 8.5px)";   // body — person 1
+const FS2      = "clamp(5.5px, 0.6vw, 8px)";    // body — person 2
+const FS_HEAD  = "clamp(8px, 0.85vw, 11px)";    // static heading
+const FS_SUB   = "clamp(5.5px, 0.6vw, 8px)";    // static sub-lines
+const FS_MARGIN = "clamp(4.5px, 0.5vw, 6.5px)"; // margin note
 
 const INK1 = "rgba(237,231,219,0.91)";   // warm white   — Onkar
 const INK2 = "rgba(196,154, 98,0.88)";   // warm gold    — Friend
@@ -138,15 +138,6 @@ function WL({ text, s, d, p, on, rot = 0, style }: WLProps) {
 
 /** CSS style for animated SVG stroke (drives drawStroke keyframe). */
 function da(at: number, dur: number, dash: number, on: boolean): React.CSSProperties {
-  return {
-    strokeDasharray : dash,
-    strokeDashoffset: dash,
-    animation       : on ? `drawStroke ${dur}ms ease ${at}ms both` : "none",
-  } as React.CSSProperties;
-}
-
-// ── Imperfect circle (ClayWorks) ─────────────────────────────────────────────
-function RoughCircle({ at, dur, on }: { at: number; dur: number; on: boolean }) {
   return (
     <svg
       viewBox="0 0 110 28"
@@ -332,16 +323,16 @@ function FoldedCorner() {
 // STICKY NOTE  (tape static, handwriting animated)
 // ─────────────────────────────────────────────────────────────────────────────
 function StickyNote({ on }: { on: boolean }) {
-  const fs = "clamp(7px,0.7vw,9px)";
+  const fs = "clamp(5px,0.55vw,7px)";
   return (
     <div
       style={{
         position: "absolute", top: "37%", left: "67%",
-        width: "clamp(50px,5.8vw,76px)",
+        width: "clamp(40px,4.5vw,60px)",
         background: "rgba(242,233,212,0.07)",
         border: "0.5px solid rgba(242,233,212,0.06)",
         borderRadius: "1px",
-        padding: "clamp(4px,0.42vw,6px) clamp(5px,0.5vw,7px)",
+        padding: "clamp(3px,0.3vw,5px) clamp(4px,0.4vw,6px)",
         transform: "rotate(2.2deg)",
         pointerEvents: "none",
         zIndex: 25,
@@ -350,8 +341,8 @@ function StickyNote({ on }: { on: boolean }) {
       {/* Tape strip — static, never animated */}
       <div
         style={{
-          position: "absolute", top: "-5px", left: "18%",
-          width: "32%", height: "8px",
+          position: "absolute", top: "-4px", left: "18%",
+          width: "32%", height: "6px",
           background: "rgba(242,233,212,0.07)",
           borderRadius: "1px",
           transform: "rotate(-0.6deg)",
@@ -368,7 +359,7 @@ function StickyNote({ on }: { on: boolean }) {
         {/* Small star */}
         <div
           style={{
-            fontSize: "clamp(6px,0.6vw,7.5px)",
+            fontSize: "clamp(4px,0.4vw,5px)",
             color: "rgba(196,154,98,0.30)",
             marginTop: "2px",
             display: "block",
@@ -396,7 +387,7 @@ function MarginNote({ on }: { on: boolean }) {
   return (
     <div
       style={{
-        position: "absolute", top: "17%", left: "52.5%",
+        position: "absolute", top: "17%", left: "50.5%",
         fontFamily: F1,
         fontSize: FS_MARGIN,
         color: "rgba(237,231,219,0.24)",
@@ -413,7 +404,7 @@ function MarginNote({ on }: { on: boolean }) {
       <div style={{ display: "block" }}>
         <Chars s={seq("tomorrow.", 61900, 650)} on={on} />
       </div>
-      <div style={{ marginTop: "3px", display: "flex", alignItems: "center" }}>
+      <div style={{ marginTop: "2px", display: "flex", alignItems: "center" }}>
         <PhoneDoodle at={63000} dur={600} on={on} />
       </div>
     </div>
@@ -467,7 +458,7 @@ function StaticContent() {
           lineHeight: 1.5,
         }}
       >
-        {"\u2192"}&nbsp;180{"\u2013"}200 people
+        {"→"}&nbsp;180{"–"}200 people
         <div
           style={{
             height: "1px",
@@ -478,7 +469,7 @@ function StaticContent() {
         />
       </div>
 
-      <div style={{ height: "clamp(7px,0.65vw,11px)" }} />
+      <div style={{ height: "clamp(5px,0.5vw,8px)" }} />
     </div>
   );
 }
@@ -489,14 +480,14 @@ function StaticContent() {
 function LeftPage({ on }: { on: boolean }) {
   // Deterministic micro-rotation per line (feels handwritten, not robotic)
   const r = (n: number) => (((n * 7) % 9) - 4) * 0.07;
-  const gap = <div style={{ height: "clamp(3px,0.32vw,5px)" }} />;
+  const gap = <div style={{ height: "clamp(2px,0.25vw,4px)" }} />;
   const INDENT = { paddingLeft: "1.05em" } as React.CSSProperties;
 
   return (
     <div
       style={{
         position: "absolute",
-        top: "9%", left: "4%", width: "43%", height: "82%",
+        top: "12%", left: "10%", width: "36%", height: "76%",
         overflow: "hidden",
         zIndex: 10,
       }}
@@ -513,7 +504,7 @@ function LeftPage({ on }: { on: boolean }) {
         <WL text="Need venue" s={3000} d={2500} p={1} on={on} rot={r(1)} />
 
         {/* ── 6.5s  → Ask Rishi  (Onkar, 1.5s) ── */}
-        <WL text="\u2192 Ask Rishi" s={6500} d={1500} p={1} on={on} rot={r(2)} style={INDENT} />
+        <WL text="→ Ask Rishi" s={6500} d={1500} p={1} on={on} rot={r(2)} style={INDENT} />
 
         {/* ── 9.0s  ClayWorks, Indiranagar?  (Friend, 2.0s) + circle at 11.8s ── */}
         <div style={{ position: "relative", display: "inline-block", marginBottom: "0.5px" }}>
@@ -531,7 +522,7 @@ function LeftPage({ on }: { on: boolean }) {
         <WL text="Need AV" s={15500} d={2000} p={1} on={on} rot={r(4)} />
 
         {/* ── 18.8s  → Navaneeth knows someone.  (Friend, 2.3s) ── */}
-        <WL text="\u2192 Navaneeth knows someone." s={18800} d={2300} p={2} on={on} rot={r(5)} style={INDENT} />
+        <WL text="→ Navaneeth knows someone." s={18800} d={2300} p={2} on={on} rot={r(5)} style={INDENT} />
 
         {/* ── 22.1s  Used them for React Bangalore.  (Friend, 2.4s) ── */}
         <WL text="Used them for React Bangalore." s={22100} d={2400} p={2} on={on} rot={r(6)} style={INDENT} />
@@ -542,7 +533,7 @@ function LeftPage({ on }: { on: boolean }) {
         <WL text="Need photographer" s={26500} d={2400} p={1} on={on} rot={r(7)} />
 
         {/* ── 31.2s  → Ask Ananya.  (Friend, 1.8s) ── */}
-        <WL text="\u2192 Ask Ananya." s={31200} d={1800} p={2} on={on} rot={r(8)} style={INDENT} />
+        <WL text="→ Ask Ananya." s={31200} d={1800} p={2} on={on} rot={r(8)} style={INDENT} />
 
         {/* ── 33.3s  She worked with Atharva last month.  (Friend, 2.8s) ── */}
         <WL text="She worked with Atharva last month." s={33300} d={2800} p={2} on={on} rot={r(9)} style={INDENT} />
@@ -555,7 +546,7 @@ function LeftPage({ on }: { on: boolean }) {
         {/* ── 39.8s  Loved his work.  (Onkar, 1.8s) + underline at 42s ── */}
         <div>
           <WL text="Loved his work." s={39800} d={1800} p={1} on={on} rot={r(11)} />
-          <div style={{ width: "clamp(48px,6.5vw,84px)" }}>
+          <div style={{ width: "clamp(35px,4.5vw,60px)" }}>
             <Underline at={42000} dur={400} on={on} />
           </div>
         </div>
@@ -577,14 +568,14 @@ function LeftPage({ on }: { on: boolean }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function RightPage({ on }: { on: boolean }) {
   const r = (n: number) => (((n * 11 + 3) % 9) - 4) * 0.07;
-  const gap = <div style={{ height: "clamp(3px,0.32vw,5px)" }} />;
+  const gap = <div style={{ height: "clamp(2px,0.25vw,4px)" }} />;
   const INDENT = { paddingLeft: "1.05em" } as React.CSSProperties;
 
   return (
     <div
       style={{
         position: "absolute",
-        top: "9%", left: "54%", width: "40%", height: "82%",
+        top: "12%", left: "54%", width: "36%", height: "76%",
         overflow: "hidden",
         zIndex: 10,
       }}
@@ -615,11 +606,11 @@ function RightPage({ on }: { on: boolean }) {
         <WL text="IIIT-B" s={54600} d={1000} p={2} on={on} rot={r(3)} />
 
         {/* ── 56.0s  ↓ Sumedha can coordinate.  (Onkar, 2.4s) ── */}
-        <WL text="\u2193 Sumedha can coordinate." s={56000} d={2400} p={1} on={on} rot={r(4)} />
+        <WL text="↓ Sumedha can coordinate." s={56000} d={2400} p={1} on={on} rot={r(4)} />
 
         {/* Vertical breathing space while margin note appears (61–64s) */}
-        <div style={{ height: "clamp(5px,0.5vw,8px)" }} />
-        <div style={{ height: "clamp(5px,0.5vw,8px)" }} />
+        <div style={{ height: "clamp(4px,0.4vw,6px)" }} />
+        <div style={{ height: "clamp(4px,0.4vw,6px)" }} />
 
         {/* ── 66.5s  Extension boards.  (Onkar, 1.6s) + oval at 68.6s ── */}
         <div style={{ position: "relative", display: "inline-block", marginBottom: "0.5px" }}>
@@ -632,7 +623,7 @@ function RightPage({ on }: { on: boolean }) {
         </div>
 
         {/* ── 70.0s  Don't trust the venue :(  (Friend, 2.2s) ── */}
-        <WL text="Don\u2019t trust the venue :(" s={70000} d={2200} p={2} on={on} rot={r(6)} />
+        <WL text="Don’t trust the venue :(" s={70000} d={2200} p={2} on={on} rot={r(6)} />
 
         {gap}
 
@@ -642,7 +633,7 @@ function RightPage({ on }: { on: boolean }) {
         {/* ── 77.2s  → Onkar hotspot?  (Onkar, 2.0s) + cross-out at 79.6s ── */}
         <div style={{ position: "relative", display: "inline-block" }}>
           <WL
-            text="\u2192 Onkar hotspot?"
+            text="→ Onkar hotspot?"
             s={77200} d={2000} p={1} on={on} rot={r(8)}
             style={{ display: "inline-block", opacity: 0.72 }}
           />
@@ -661,10 +652,10 @@ function RightPage({ on }: { on: boolean }) {
         </div>
 
         {/* Gap while sticky note writes (88–90s) */}
-        <div style={{ height: "clamp(12px,1.4vw,20px)" }} />
+        <div style={{ height: "clamp(10px,1.2vw,16px)" }} />
 
         {/* ── 95.0s  We're ready.  (Onkar, 2.5s) ── */}
-        <WL text="We\u2019re ready." s={95000} d={2500} p={1} on={on} rot={r(11)} />
+        <WL text="We’re ready." s={95000} d={2500} p={1} on={on} rot={r(11)} />
 
         {gap}
 
