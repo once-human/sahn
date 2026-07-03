@@ -115,70 +115,47 @@ export default function Hero() {
         className="absolute top-0 left-0 w-full flex items-center justify-between px-12 lg:px-[12%] pt-8 lg:pt-14 pb-8 z-[110] max-w-[1600px] mx-auto right-0 pointer-events-none"
       >
         <div 
-          className="font-sans text-[16px] uppercase tracking-[0.65em] font-medium text-[#F4EEE7] cursor-pointer pointer-events-auto transition-opacity hover:opacity-80"
+          className="relative inline-block pointer-events-auto"
           onMouseEnter={() => setIsPopupOpen(true)}
           onMouseLeave={() => setIsPopupOpen(false)}
-          onClick={() => setIsPopupOpen(true)}
+          onClick={() => setIsPopupOpen(!isPopupOpen)}
         >
-          S A H N
+          <div className="font-sans text-[16px] uppercase tracking-[0.65em] font-medium text-[#C9A470] cursor-pointer transition-opacity hover:opacity-80">
+            S A H N
+          </div>
+          
+          <AnimatePresence>
+            {isPopupOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95, filter: "blur(4px)" }}
+                animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                exit={{ opacity: 0, y: 5, scale: 0.95, filter: "blur(4px)" }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                className="absolute top-[100%] left-0 mt-4 w-[300px] p-5 rounded-2xl bg-[#C9A470]/5 backdrop-blur-[24px] border border-[#C9A470]/15 shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-[120] pointer-events-auto cursor-default"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <h4 className="font-serif text-[#C9A470] text-xl mb-3">Why SAHN?</h4>
+                <div className="flex flex-col gap-3 font-sans text-[13px] text-[#F3ECE5]/70 leading-[1.6]">
+                  <p>
+                    A sahn is traditionally the open courtyard at the heart of a place, a space where people gather, meet, exchange ideas and begin something together.
+                  </p>
+                  <p>
+                    That&apos;s what we want SAHN to become for events: the place where organizers discover the people who bring ideas to life.
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-
-        <nav className="hidden lg:flex items-center gap-10 font-sans text-[15px] text-[#F4EEE7] pointer-events-auto">
-          <a href="#" className="opacity-70 hover:opacity-100 transition-opacity">
-            About
-          </a>
-          <a
-            href="#"
-            className="flex items-center gap-[6px] border border-[rgba(201,164,112,0.35)] px-[16px] py-[10px] rounded-[10px] hover:border-[rgba(201,164,112,0.7)] transition-colors duration-300"
-          >
-            <span className="opacity-90">We&apos;re in Pune/BLR</span>
-            <span className="w-[5px] h-[5px] rounded-full bg-[#C9A470] block ml-1" />
-          </a>
-        </nav>
       </motion.header>
-
-      {/* ── SAHN Hover Popup ── */}
-      <AnimatePresence>
-        {isPopupOpen && (
-          <motion.div
-            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            animate={{ opacity: 1, backdropFilter: "blur(16px)" }}
-            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 px-6"
-            onClick={() => setIsPopupOpen(false)}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-[480px] w-full bg-[#080808]/80 backdrop-blur-md border border-[#F4EEE7]/10 p-10 lg:p-12 rounded-[24px] shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3 className="font-serif text-[#F4EEE7] text-3xl mb-6">Why SAHN?</h3>
-              <div className="flex flex-col gap-6 text-[#F4EEE7] opacity-80 font-sans text-[16px] leading-[1.7]">
-                <p>
-                  A sahn is traditionally the open courtyard at the heart of a place, a space where people gather, meet, exchange ideas and begin something together.
-                </p>
-                <p>
-                  That&apos;s what we want SAHN to become for events: the place where organizers discover the people who bring ideas to life.
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* ── Main Content ── */}
       <div className="flex-1 w-full max-w-[1600px] mx-auto flex flex-col lg:flex-row mt-24 lg:mt-0 relative z-10">
 
         {/* Left Column */}
         <div className="w-full lg:w-[45%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-[5%] pt-10 lg:pb-0 pb-12 z-20">
-          <h1 className="font-serif text-[#F3ECE5] text-[3.2rem] sm:text-[3.8rem] lg:text-[4.2rem] leading-[1.05] font-[500] tracking-tight mb-8 flex flex-wrap">
-            <span className="w-full flex flex-wrap">
-              <AnimatedHeadline text="Structured Vendor Sourcing for Events" />
-            </span>
+          <h1 className="font-serif text-[#F3ECE5] text-[3.2rem] sm:text-[3.6rem] lg:text-[4rem] xl:text-[4.2rem] leading-[1.05] font-[500] tracking-tight mb-8 w-full sm:w-[120%] lg:w-[140%] max-w-[800px]">
+            <AnimatedHeadline text="Structured Vendor Sourcing for Events" />
           </h1>
 
           <div className="flex flex-col text-[#F3ECE5] font-sans max-w-[32rem]">
@@ -199,7 +176,7 @@ export default function Hero() {
               variants={lineVariants}
               initial="hidden"
               animate="visible"
-              className="opacity-[45%] text-[0.95rem] leading-[1.8]"
+              className="opacity-[28%] text-[0.8rem] leading-[2]"
             >
               Photography &bull; AV &bull; Venues &bull; Production &bull; Hospitality &bull; Catering &bull; Merchandise
             </motion.p>
