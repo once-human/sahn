@@ -131,11 +131,11 @@ export default function Hero() {
                 animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
                 exit={{ opacity: 0, y: 5, scale: 0.95, filter: "blur(4px)" }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
-                className="absolute top-[100%] left-0 mt-4 w-[300px] p-5 rounded-2xl bg-[#C9A470]/5 backdrop-blur-[24px] border border-[#C9A470]/15 shadow-[0_8px_32px_rgba(0,0,0,0.4)] z-[120] pointer-events-auto cursor-default"
+                className="absolute top-[100%] left-0 mt-4 w-[280px] p-5 rounded-[20px] bg-[rgba(255,255,255,0.05)] backdrop-blur-3xl backdrop-saturate-[180%] border border-[rgba(255,255,255,0.15)] shadow-[0_24px_48px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.25)] z-[120] pointer-events-auto cursor-default"
                 onClick={(e) => e.stopPropagation()}
               >
                 <h4 className="font-serif text-[#C9A470] text-xl mb-3">Why SAHN?</h4>
-                <div className="flex flex-col gap-3 font-sans text-[13px] text-[#F3ECE5]/70 leading-[1.6]">
+                <div className="flex flex-col gap-3 font-sans text-[13px] text-[#F3ECE5]/80 leading-[1.6]">
                   <p>
                     A sahn is traditionally the open courtyard at the heart of a place, a space where people gather, meet, exchange ideas and begin something together.
                   </p>
@@ -150,7 +150,13 @@ export default function Hero() {
       </motion.header>
 
       {/* ── Main Content ── */}
-      <div className="flex-1 w-full max-w-[1600px] mx-auto flex flex-col lg:flex-row mt-24 lg:mt-0 relative z-10">
+      <motion.div
+        animate={{
+          filter: isPopupOpen ? "blur(12px) brightness(0.6)" : "blur(0px) brightness(1)",
+        }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+        className="flex-1 w-full max-w-[1600px] mx-auto flex flex-col lg:flex-row mt-24 lg:mt-0 relative z-10"
+      >
 
         {/* Left Column */}
         <div className="w-full lg:w-[45%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-[5%] pt-10 lg:pb-0 pb-12 z-20">
@@ -222,15 +228,13 @@ export default function Hero() {
               {/*
                 The living notebook overlay.
                 Sits absolutely on top of the image, clipped to the right page.
-                Animates independently — notebook floats, writing runs once.
               */}
               <NotebookOverlay />
 
             </motion.div>
           </motion.div>
         </div>
-
-      </div>
+      </motion.div>
     </div>
   );
 }
