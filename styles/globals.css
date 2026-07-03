@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0E0D0D;
+  --color-background: #0D0D0D;
   --color-foreground: #ededed;
   --font-sans: var(--font-inter);
   --font-serif: var(--font-cormorant);
@@ -20,10 +20,10 @@ body {
   inset: 0;
   z-index: -10;
   pointer-events: none;
-  background-color: #0E0D0D;
-  /* Very subtle warm radial light originating from upper-left */
+  background-color: #0D0D0D;
+  /* Extremely subtle warm radial light originating from upper-left */
   background-image: 
-    radial-gradient(circle at 15% 15%, rgba(60, 45, 35, 0.25) 0%, rgba(14, 13, 13, 0) 60%),
-    /* Very soft vignette around the edges */
-    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.7) 120%);
+    radial-gradient(circle at 10% 10%, rgba(35, 30, 25, 0.12) 0%, rgba(13, 13, 13, 0) 50%),
+    /* Gentle vignette around the edges */
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 120%);
 }
