@@ -341,12 +341,13 @@ function StickyNote({ on }: { on: boolean }) {
   return (
     <div
       style={{
-        position: "absolute", top: "50%", left: "67%",
+        position: "absolute", top: "50%", left: "64%",
         width: "clamp(46px,5.2vw,68px)",
-        background: "linear-gradient(135deg, rgba(230,202,146,0.95) 0%, rgba(214,180,117,0.95) 100%)",
-        border: "0.5px solid rgba(0,0,0,0.1)",
-        borderRadius: "2px 8px 2px 12px / 2px 12px 4px 20px",
-        clipPath: "polygon(1% 0, 100% 1%, 98% 100%, 0 99%)",
+        background: "rgba(242,233,212,0.05)",
+        backgroundImage: "radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0%, transparent 20%), radial-gradient(circle at 90% 80%, rgba(0,0,0,0.1) 0%, transparent 50%)",
+        border: "0.5px solid rgba(242,233,212,0.08)",
+        boxShadow: "inset 0 0 4px rgba(255,255,255,0.02), inset -1px -2px 6px rgba(0,0,0,0.1)",
+        borderRadius: "1px 2px 1px 3px",
         padding: "clamp(3px,0.35vw,5px) clamp(4px,0.45vw,6px)",
         pointerEvents: "none",
         zIndex: 25,
@@ -358,14 +359,13 @@ function StickyNote({ on }: { on: boolean }) {
         style={{
           position: "absolute", top: "-4px", left: "18%",
           width: "32%", height: "6px",
-          background: "rgba(255, 255, 255, 0.4)",
-          border: "0.5px solid rgba(255, 255, 255, 0.2)",
+          background: "rgba(242,233,212,0.07)",
           borderRadius: "1px",
           transform: "rotate(-0.6deg)",
         }}
       />
       {/* Handwritten text */}
-      <div style={{ fontFamily: F1, fontSize: fs, color: "rgba(20,20,20,0.9)", lineHeight: 1.4 }}>
+      <div style={{ fontFamily: F1, fontSize: fs, color: INK1, lineHeight: 1.4 }}>
         <div style={{ display: "block" }}>
           <Chars s={seq("Remember", 88000, 1000)} on={on} />
         </div>
@@ -376,7 +376,7 @@ function StickyNote({ on }: { on: boolean }) {
         <div
           style={{
             fontSize: "clamp(5px,0.5vw,6px)",
-            color: "rgba(20,20,20,0.5)",
+            color: "rgba(196,154,98,0.30)",
             marginTop: "2px",
             display: "block",
           }}
@@ -679,7 +679,7 @@ function RightPage({ on }: { on: boolean }) {
         {/* ── 84.0s  Registration closes Friday.  (Onkar, 2.3s) + underline 86.8s ── */}
         <div>
           <WL text="Registration closes Friday." s={84000} d={2300} p={1} on={on} rot={r(10)} />
-          <div style={{ width: "80%" }}>
+          <div style={{ width: "68%" }}>
             <Underline at={86800} dur={400} on={on} />
           </div>
         </div>
