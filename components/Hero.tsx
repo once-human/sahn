@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import NotebookOverlay from "@/components/NotebookOverlay";
 
 // ── Cinematic animation variants ────────────────────────────────────────────
@@ -80,6 +80,7 @@ function AnimatedHeadline({ text }: { text: string }) {
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -111,39 +112,97 @@ export default function Hero() {
         initial={{ opacity: 0, y: -18, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute top-0 left-0 w-full flex items-center justify-between px-12 lg:px-[12%] pt-8 lg:pt-14 pb-8 z-50 max-w-[1600px] mx-auto right-0"
+        className="absolute top-0 left-0 w-full flex items-center justify-between px-12 lg:px-[12%] pt-8 lg:pt-14 pb-8 z-[110] max-w-[1600px] mx-auto right-0 pointer-events-none"
       >
-        <div className="font-sans text-[11px] uppercase tracking-[0.65em] font-medium text-[#F4EEE7]">
+        <div 
+          className="font-sans text-[16px] uppercase tracking-[0.65em] font-medium text-[#F4EEE7] cursor-pointer pointer-events-auto transition-opacity hover:opacity-80"
+          onMouseEnter={() => setIsPopupOpen(true)}
+          onMouseLeave={() => setIsPopupOpen(false)}
+          onClick={() => setIsPopupOpen(true)}
+        >
           S A H N
         </div>
+
+        <nav className="hidden lg:flex items-center gap-10 font-sans text-[15px] text-[#F4EEE7] pointer-events-auto">
+          <a href="#" className="opacity-70 hover:opacity-100 transition-opacity">
+            About
+          </a>
+          <a
+            href="#"
+            className="flex items-center gap-[6px] border border-[rgba(201,164,112,0.35)] px-[16px] py-[10px] rounded-[10px] hover:border-[rgba(201,164,112,0.7)] transition-colors duration-300"
+          >
+            <span className="opacity-90">We&apos;re in Pune/BLR</span>
+            <span className="w-[5px] h-[5px] rounded-full bg-[#C9A470] block ml-1" />
+          </a>
+        </nav>
       </motion.header>
+
+      {/* ── SAHN Hover Popup ── */}
+      <AnimatePresence>
+        {isPopupOpen && (
+          <motion.div
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(16px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 px-6"
+            onClick={() => setIsPopupOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-[480px] w-full bg-[#080808]/80 backdrop-blur-md border border-[#F4EEE7]/10 p-10 lg:p-12 rounded-[24px] shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="font-serif text-[#F4EEE7] text-3xl mb-6">Why SAHN?</h3>
+              <div className="flex flex-col gap-6 text-[#F4EEE7] opacity-80 font-sans text-[16px] leading-[1.7]">
+                <p>
+                  A sahn is traditionally the open courtyard at the heart of a place, a space where people gather, meet, exchange ideas and begin something together.
+                </p>
+                <p>
+                  That&apos;s what we want SAHN to become for events: the place where organizers discover the people who bring ideas to life.
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Main Content ── */}
       <div className="flex-1 w-full max-w-[1600px] mx-auto flex flex-col lg:flex-row mt-24 lg:mt-0 relative z-10">
 
         {/* Left Column */}
         <div className="w-full lg:w-[45%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-[5%] pt-10 lg:pb-0 pb-12 z-20">
-          <h1 className="font-serif text-[#F3ECE5] text-[3rem] sm:text-[3.5rem] lg:text-[4.5rem] leading-[0.95] font-[500] tracking-tight mb-6 flex flex-wrap">
+          <h1 className="font-serif text-[#F3ECE5] text-[3.2rem] sm:text-[3.8rem] lg:text-[4.2rem] leading-[1.05] font-[500] tracking-tight mb-8 flex flex-wrap">
             <span className="w-full flex flex-wrap">
-              <AnimatedHeadline text="Every great event begins with a plan." />
+              <AnimatedHeadline text="Structured Vendor Sourcing for Events" />
             </span>
           </h1>
 
-          <div className="flex flex-col gap-[18px] text-[#F3ECE5] opacity-[58%] text-[1.05rem] leading-[1.6] max-w-[28rem] font-sans">
-            {[
-              "It comes to life with the right people.",
-              "Sahn helps organizers find the people they can trust, before the event begins.",
-            ].map((line, i) => (
-              <motion.p
-                key={i}
-                custom={i}
-                variants={lineVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                {line}
-              </motion.p>
-            ))}
+          <div className="flex flex-col text-[#F3ECE5] font-sans max-w-[32rem]">
+            <motion.p
+              custom={0}
+              variants={lineVariants}
+              initial="hidden"
+              animate="visible"
+              className="opacity-[65%] text-[1.05rem] leading-[1.6]"
+            >
+              One place to source, compare and coordinate the people behind your next event.
+            </motion.p>
+            
+            <div className="h-6" />
+            
+            <motion.p
+              custom={1}
+              variants={lineVariants}
+              initial="hidden"
+              animate="visible"
+              className="opacity-[45%] text-[0.95rem] leading-[1.8]"
+            >
+              Photography &bull; AV &bull; Venues &bull; Production &bull; Hospitality &bull; Catering &bull; Merchandise
+            </motion.p>
           </div>
         </div>
 
