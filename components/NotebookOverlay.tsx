@@ -26,11 +26,11 @@ const F1 = "var(--font-shadows-into-light), 'Shadows Into Light', cursive";
 // Person 2 — Friend (Patrick Hand: casual, rounder, warm)
 const F2 = "var(--font-patrick-hand), 'Patrick Hand', cursive";
 
-const FS1      = "clamp(9px, 0.95vw, 12.5px)";   // body — person 1
-const FS2      = "clamp(8.5px, 0.9vw, 12px)";    // body — person 2
-const FS_HEAD  = "clamp(12px, 1.3vw, 17px)";     // static heading
-const FS_SUB   = "clamp(9px, 0.9vw, 12px)";      // static sub-lines
-const FS_MARGIN = "clamp(5.5px, 0.52vw, 7px)";   // margin note
+const FS1      = "clamp(10px, 1.1vw, 14px)";     // body — person 1
+const FS2      = "clamp(9.5px, 1.05vw, 13.5px)";  // body — person 2
+const FS_HEAD  = "clamp(13px, 1.4vw, 18px)";      // static heading
+const FS_SUB   = "clamp(10px, 1.05vw, 13.5px)";   // static sub-lines
+const FS_MARGIN = "clamp(6px, 0.6vw, 8px)";       // margin note
 
 const INK1 = "rgba(237,231,219,0.91)";   // warm white   — Onkar
 const INK2 = "rgba(196,154, 98,0.88)";   // warm gold    — Friend
@@ -505,7 +505,15 @@ function LeftPage({ on }: { on: boolean }) {
       <CoffeeStain />
       <GraphiteSmudge />
 
-      <div style={{ paddingLeft: "5%", paddingRight: "3%", paddingTop: "2%" }}>
+      <div
+        style={{
+          paddingLeft: "7%",
+          paddingRight: "1%",
+          paddingTop: "6%",
+          transform: "rotate(1.8deg)",
+          transformOrigin: "top left",
+        }}
+      >
         {/* ── Static ── */}
         <StaticContent />
 
@@ -552,9 +560,9 @@ function LeftPage({ on }: { on: boolean }) {
         {/* ── 37.8s  Met Karthik.  (Onkar, 1.7s) ── */}
         <WL text="Met Karthik." s={37800} d={1700} p={1} on={on} rot={r(10)} />
 
-        {/* ── 39.8s  Loved his work.  (Onkar, 1.8s) + underline at 42s ── */}
+        {/* ── 39.8s  Loved his work!  (Onkar, 1.8s) + underline at 42s ── */}
         <div>
-          <WL text="Loved his work." s={39800} d={1800} p={1} on={on} rot={r(11)} />
+          <WL text="Loved his work!" s={39800} d={1800} p={1} on={on} rot={r(11)} />
           <div style={{ width: "clamp(35px,4.5vw,60px)" }}>
             <Underline at={42000} dur={400} on={on} />
           </div>
