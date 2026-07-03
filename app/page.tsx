@@ -13,6 +13,7 @@ export default function Home() {
       
       {/* Cinematic Background Layer */}
       <div className="cinematic-bg" />
+      <div className="grain-overlay" />
     </main>
   );
 }

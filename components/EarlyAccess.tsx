@@ -37,12 +37,12 @@ export default function EarlyAccess() {
   };
 
   return (
-    <section className="w-full bg-[#0D0D0D] border-b border-[#3A2E25]/30 text-[#F2ECE5] px-12 py-32 flex flex-col items-center justify-center">
+    <section className="w-full text-[#F3ECE5] px-12 py-32 flex flex-col items-center justify-center">
       <div className="w-full max-w-[600px] text-center">
-        <h2 className="font-serif text-[2.5rem] leading-[1.2] font-medium tracking-tight mb-4">
+        <h2 className="font-serif text-[2.5rem] leading-[1.2] font-[500] tracking-tight mb-4">
           Starting with Pune and Bengaluru.
         </h2>
-        <p className="text-[15px] text-[rgba(242,236,229,0.60)] mb-12">
+        <p className="text-[15px] text-[#F3ECE5] opacity-[58%] mb-12">
           Get early access and be part of the first community.
         </p>
 
@@ -55,10 +55,10 @@ export default function EarlyAccess() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               disabled={status === "loading" || status === "success"}
-              className="w-full bg-transparent border-b border-[#3A2E25] px-2 py-3 text-[15px] text-[#F2ECE5] placeholder:text-[#F2ECE5]/30 focus:outline-none focus:border-[#F2ECE5]/50 transition-colors disabled:opacity-50"
+              className="w-full bg-transparent border-b border-[#3A2E25] px-2 py-3 text-[15px] text-[#F3ECE5] placeholder:text-[#F3ECE5] placeholder:opacity-[30%] focus:outline-none focus:border-[#F3ECE5]/50 transition-colors disabled:opacity-50"
             />
             {message && (
-              <p className={`absolute -bottom-8 left-0 text-[13px] ${status === 'success' ? 'text-[#E5D2BA]' : 'text-red-400'}`}>
+              <p className={`absolute -bottom-8 left-0 text-[13px] ${status === 'success' ? 'text-[#C9A470]' : 'text-red-400'}`}>
                 {message}
               </p>
             )}
@@ -67,14 +67,19 @@ export default function EarlyAccess() {
           <button
             type="submit"
             disabled={status === "loading" || status === "success"}
-            className="group flex items-center gap-[6px] border border-[#3A2E25] px-6 py-2.5 rounded-[10px] hover:border-[#554639] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+            className="group inline-flex items-center text-[#F3ECE5] text-[15px] font-medium relative pt-2"
           >
-            <span className="opacity-90 text-[13px] font-medium tracking-wide">
+            <span className="relative pb-1">
               {status === "loading" ? "Joining..." : status === "success" ? "Joined" : "Join early access"}
+              {status === "idle" && (
+                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#F3ECE5]/30 origin-left transition-transform duration-400 ease-out group-hover:scale-x-110" />
+              )}
             </span>
-            <span className="ml-2 transform transition-transform duration-[400ms] ease-out group-hover:translate-x-1 inline-block font-serif text-lg opacity-90">
-              →
-            </span>
+            {status === "idle" && (
+              <span className="ml-4 transform transition-transform duration-400 ease-out group-hover:translate-x-[4px] inline-block font-serif text-lg pb-1">
+                →
+              </span>
+            )}
           </button>
         </form>
       </div>

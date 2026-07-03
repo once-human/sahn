@@ -8,10 +8,9 @@
 }
 
 body {
-  background-color: var(--color-background);
+  background-color: #0D0C0C;
   color: var(--color-foreground);
   font-family: var(--font-sans), sans-serif;
-  /* Prevent scrolling horizontally */
   overflow-x: hidden;
 }
 
@@ -20,10 +19,51 @@ body {
   inset: 0;
   z-index: -10;
   pointer-events: none;
-  background-color: #0D0D0D;
-  /* Extremely subtle warm radial light originating from upper-left */
-  background-image: 
-    radial-gradient(circle at 10% 10%, rgba(35, 30, 25, 0.12) 0%, rgba(13, 13, 13, 0) 50%),
-    /* Gentle vignette around the edges */
-    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.8) 120%);
+  background-color: #0D0C0C; /* Layer 1 */
+}
+
+/* Layer 2: Radial light */
+.cinematic-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 10% 10%, rgba(255, 240, 220, 0.035) 0%, rgba(13, 12, 12, 0) 60%);
+  pointer-events: none;
+}
+
+/* Layer 3: Vignette */
+.cinematic-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.4) 120%);
+  pointer-events: none;
+}
+
+/* Layer 4: Grain */
+.grain-overlay {
+  position: fixed;
+  inset: -150%;
+  width: 300%;
+  height: 300%;
+  background-image: url('/grain.png');
+  background-repeat: repeat;
+  opacity: 0.015;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 50; /* Needs to be above everything for film feel, or -5 if just bg */
+}
+
+/* Layer 5: Bloom for notebook */
+.notebook-bloom {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle at center, rgba(201, 164, 112, 0.04) 0%, transparent 60%);
+  filter: blur(40px);
+  z-index: -1;
+  pointer-events: none;
 }
