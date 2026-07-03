@@ -90,7 +90,7 @@ export default function Hero() {
         <div className="w-[58%] h-full relative flex items-center justify-center pt-8">
           <motion.div 
             style={{ x, y }} 
-            className="relative w-[85%] max-w-[750px] aspect-[4/3]"
+            className="relative w-[150%] max-w-[1350px] aspect-[4/3]"
           >
             <motion.div
               animate={{ y: [-2, 2, -2] }}
@@ -101,20 +101,13 @@ export default function Hero() {
               }}
               className="w-full h-full relative"
             >
-              {/* Layered shadows for the notebook */}
-              <div className="absolute inset-0 z-0">
-                <div className="absolute inset-8 bg-black/80 blur-2xl transform translate-y-8 rotate-[1deg]" />
-                <div className="absolute inset-16 bg-black/50 blur-3xl transform translate-y-16 translate-x-4" />
-                <div className="absolute inset-4 bg-black/40 blur-lg transform translate-y-3" />
-              </div>
-              
               <Image 
                 src="/notebook.png"
                 alt="Sahn Notebook"
                 fill
-                className="object-contain relative z-10 transform -rotate-[3deg]"
+                className="object-contain relative z-10 transform -rotate-[3deg] [filter:drop-shadow(0_30px_40px_rgba(0,0,0,0.85))_drop-shadow(0_10px_15px_rgba(0,0,0,0.6))]"
                 priority
-                sizes="(max-width: 768px) 100vw, 60vw"
+                sizes="(max-width: 768px) 100vw, 80vw"
               />
             </motion.div>
           </motion.div>
