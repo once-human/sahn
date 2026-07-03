@@ -106,7 +106,7 @@ export default function Hero() {
             style={{ x, y }} 
             className="absolute w-[110%] sm:w-[130%] lg:w-[172.5%] max-w-[500px] sm:max-w-[750px] lg:max-w-[1620px] aspect-[4/3] pointer-events-none -ml-[20px] sm:-ml-[50px] lg:-ml-[105px] mt-[20px] sm:mt-[40px] lg:mt-[80px] transform-gpu will-change-transform"
           >
-            {/* Vertical floating only (max 2px, 12s, easeInOut) */}
+            {/* Vertical floating and rotation only (max 2px, 12s, easeInOut) */}
             <motion.div
               animate={{ y: [-2, 2, -2] }}
               transition={{
@@ -114,17 +114,88 @@ export default function Hero() {
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-              className="w-full h-full relative transform-gpu will-change-transform"
+              className="w-full h-full relative transform-gpu will-change-transform -rotate-[3deg]"
             >
               
               <Image 
                 src="/notebook.png"
                 alt="Sahn Notebook"
                 fill
-                className="object-contain relative z-10 transform-gpu -rotate-[3deg] [filter:drop-shadow(4px_4px_5px_rgba(0,0,0,0.8))_drop-shadow(20px_25px_30px_rgba(0,0,0,0.22))_drop-shadow(40px_50px_60px_rgba(0,0,0,0.1))] will-change-[transform,filter]"
+                className="object-contain relative z-10 [filter:drop-shadow(4px_4px_5px_rgba(0,0,0,0.8))_drop-shadow(20px_25px_30px_rgba(0,0,0,0.22))_drop-shadow(40px_50px_60px_rgba(0,0,0,0.1))] will-change-[transform,filter]"
                 priority
                 sizes="(max-width: 768px) 100vw, 80vw"
               />
+
+              {/* Handwritten notes overlay */}
+              <div className="absolute z-20 top-[13.5%] left-[54%] w-[38%] h-[75%] flex flex-col justify-between text-[#dcd6cd]/90 font-handwriting select-none pointer-events-none text-[2.2vw] sm:text-[1.8vw] lg:text-[1.25vw] leading-[1.4] tracking-wide">
+                
+                {/* Entry 1 */}
+                <div className="flex flex-col gap-0.5">
+                  <div className="text-[#C9A470]/90 text-[0.8em] font-medium font-sans uppercase tracking-[0.25em] mb-1">
+                    March 2
+                  </div>
+                  <div className="pl-3 text-white/90">
+                    Need a photographer<br />
+                    for the tech fest.
+                  </div>
+                  <div className="pl-3 flex items-center gap-2 mt-1 text-[#C9A470]/80">
+                    <svg className="w-[1em] h-[1em] stroke-[#C9A470] stroke-[1.5]" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <path d="m9 12 2 2 4-4" />
+                    </svg>
+                    <span className="text-[0.95em] italic">Found through Rohan.</span>
+                  </div>
+                </div>
+
+                {/* Entry 2 */}
+                <div className="flex flex-col gap-0.5">
+                  <div className="text-[#C9A470]/90 text-[0.8em] font-medium font-sans uppercase tracking-[0.25em] mb-1">
+                    March 5
+                  </div>
+                  <div className="pl-3 text-white/90">
+                    Looking for AV team<br />
+                    for mainstage.
+                  </div>
+                  <div className="pl-3 flex items-center gap-2 mt-1 text-[#C9A470]/80">
+                    <svg className="w-[1em] h-[1em] stroke-[#C9A470] stroke-[1.5]" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <path d="m9 12 2 2 4-4" />
+                    </svg>
+                    <span className="text-[0.95em] italic">Connected by Aniket.</span>
+                  </div>
+                </div>
+
+                {/* Entry 3 */}
+                <div className="flex flex-col gap-0.5">
+                  <div className="text-[#C9A470]/90 text-[0.8em] font-medium font-sans uppercase tracking-[0.25em] mb-1">
+                    March 8
+                  </div>
+                  <div className="pl-3 text-white/90">
+                    Speaker from Bangalore<br />
+                    needs accommodation.
+                  </div>
+                  <div className="pl-3 flex items-center gap-2 mt-1 text-[#C9A470]/80">
+                    <svg className="w-[1em] h-[1em] stroke-[#C9A470] stroke-[1.5]" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2" />
+                      <path d="m9 12 2 2 4-4" />
+                    </svg>
+                    <span className="text-[0.95em] italic">Hospitality partner sorted.</span>
+                  </div>
+                </div>
+
+                {/* Entry 4 */}
+                <div className="flex flex-col gap-0.5">
+                  <div className="text-[#C9A470]/90 text-[0.8em] font-medium font-sans uppercase tracking-[0.25em] mb-1">
+                    March 11
+                  </div>
+                  <div className="pl-3 flex items-center gap-2 text-white/90">
+                    <span>Everything is coming together.</span>
+                    <span className="text-[#C9A470]/90 text-[1.2em] leading-none">♥</span>
+                  </div>
+                </div>
+
+              </div>
+
             </motion.div>
           </motion.div>
         </div>

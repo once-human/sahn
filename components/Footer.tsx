@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="w-full px-12 pb-12 pt-8 flex items-center justify-between text-[11px] font-sans tracking-wide text-[#F3ECE5] opacity-[20%] mt-auto max-w-[1600px] mx-auto relative z-20">
       <div className="hover:opacity-100 transition-opacity duration-300 cursor-default">
-        &copy; Sahn 2024
+        &copy; Sahn {new Date().getFullYear()}
       </div>
       
       <div className="flex items-center gap-8">
