@@ -338,8 +338,9 @@ function StickyNote({ on }: { on: boolean }) {
       style={{
         position: "absolute", top: "50%", left: "67%",
         width: "clamp(46px,5.2vw,68px)",
-        background: "rgba(242,233,212,0.07)",
-        border: "0.5px solid rgba(242,233,212,0.06)",
+        background: "rgba(255, 247, 214, 0.95)",
+        border: "0.5px solid rgba(0,0,0,0.1)",
+        boxShadow: "2px 4px 8px rgba(0,0,0,0.3)",
         borderRadius: "1px",
         padding: "clamp(3px,0.35vw,5px) clamp(4px,0.45vw,6px)",
         transform: "rotate(2.2deg)",
@@ -352,13 +353,14 @@ function StickyNote({ on }: { on: boolean }) {
         style={{
           position: "absolute", top: "-4px", left: "18%",
           width: "32%", height: "6px",
-          background: "rgba(242,233,212,0.07)",
+          background: "rgba(255, 255, 255, 0.4)",
+          border: "0.5px solid rgba(255, 255, 255, 0.2)",
           borderRadius: "1px",
           transform: "rotate(-0.6deg)",
         }}
       />
       {/* Handwritten text */}
-      <div style={{ fontFamily: F1, fontSize: fs, color: INK1, lineHeight: 1.4 }}>
+      <div style={{ fontFamily: F1, fontSize: fs, color: "rgba(20,20,20,0.9)", lineHeight: 1.4 }}>
         <div style={{ display: "block" }}>
           <Chars s={seq("Remember", 88000, 1000)} on={on} />
         </div>
@@ -369,7 +371,7 @@ function StickyNote({ on }: { on: boolean }) {
         <div
           style={{
             fontSize: "clamp(5px,0.5vw,6px)",
-            color: "rgba(196,154,98,0.30)",
+            color: "rgba(20,20,20,0.5)",
             marginTop: "2px",
             display: "block",
           }}
@@ -502,15 +504,14 @@ function LeftPage({ on }: { on: boolean }) {
       }}
     >
       {/* Textures live on left page */}
-      <CoffeeStain />
       <GraphiteSmudge />
 
       <div
         style={{
-          paddingLeft: "7%",
+          paddingLeft: "13%",
           paddingRight: "1%",
-          paddingTop: "6%",
-          transform: "rotate(1.8deg)",
+          paddingTop: "12%",
+          transform: "rotate(-7deg)",
           transformOrigin: "top left",
         }}
       >
@@ -604,7 +605,15 @@ function RightPage({ on }: { on: boolean }) {
       {/* Sticky note — absolutely positioned in right page space */}
       <StickyNote on={on} />
 
-      <div style={{ paddingLeft: "3%", paddingRight: "4%", paddingTop: "2%" }}>
+      <div
+        style={{
+          paddingLeft: "3%",
+          paddingRight: "4%",
+          paddingTop: "6%",
+          transform: "rotate(-2deg)",
+          transformOrigin: "top left",
+        }}
+      >
 
         {/* ── 50.5s  Volunteers  (Onkar, 1.8s) ── */}
         <WL text="Volunteers" s={50500} d={1800} p={1} on={on} rot={r(1)} />
