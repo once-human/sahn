@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import NotebookOverlay from "@/components/NotebookOverlay";
 
 // ── Cinematic animation variants ────────────────────────────────────────────
 
@@ -98,9 +99,6 @@ export default function Hero() {
     return () => window.removeEventListener("mousemove", onMove);
   }, [mouseX, mouseY]);
 
-  // Shared notebook entry delays
-  const entryDelays = [0.75, 1.05, 1.35, 1.65];
-
   return (
     <div
       ref={containerRef}
@@ -108,7 +106,7 @@ export default function Hero() {
     >
       <div className="notebook-bloom" />
 
-      {/* ── Header (CTAs removed) ── */}
+      {/* ── Header ── */}
       <motion.header
         initial={{ opacity: 0, y: -18, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -123,7 +121,7 @@ export default function Hero() {
       {/* ── Main Content ── */}
       <div className="flex-1 w-full max-w-[1600px] mx-auto flex flex-col lg:flex-row mt-24 lg:mt-0 relative z-10">
 
-        {/* Left Column (CTA removed) */}
+        {/* Left Column */}
         <div className="w-full lg:w-[45%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-[5%] pt-10 lg:pb-0 pb-12 z-20">
           <h1 className="font-serif text-[#F3ECE5] text-[4.5rem] leading-[0.95] font-[500] tracking-tight mb-6 flex flex-wrap">
             <span className="w-full flex flex-wrap">
@@ -151,6 +149,13 @@ export default function Hero() {
 
         {/* Right Column — Notebook */}
         <div className="w-full lg:w-[55%] h-[60vh] lg:h-full relative flex items-center justify-center pt-8 pb-16 lg:pb-0 z-10">
+          {/*
+            Parallax outer wrapper.
+            aspect-[2/3] matches notebook.png exactly (1024×1536).
+            Because container and image share the same 2:3 ratio,
+            object-contain fills 100% — zero letterboxing.
+            Overlay coordinates therefore map 1:1 to image pixels.
+          */}
           <motion.div
             style={{ x, y }}
             variants={notebookVariants}
@@ -158,12 +163,17 @@ export default function Hero() {
             animate="visible"
             className="absolute w-[55%] sm:w-[65%] lg:w-[86.25%] max-w-[250px] sm:max-w-[375px] lg:max-w-[810px] aspect-[2/3] pointer-events-none -ml-[10px] sm:-ml-[25px] lg:-ml-[52.5px] mt-[20px] sm:mt-[40px] lg:mt-[80px] transform-gpu will-change-transform"
           >
-            {/* Floating + rotation wrapper */}
+            {/*
+              Floating + rotation wrapper.
+              Both the image and the writing overlay rotate together (-3deg)
+              so the handwriting stays perfectly aligned with the page angle.
+            */}
             <motion.div
               animate={{ y: [-2, 2, -2] }}
               transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
               className="w-full h-full relative transform-gpu will-change-transform -rotate-[3deg]"
             >
+              {/* The notebook image — static, never modified */}
               <Image
                 src="/notebook.png"
                 alt="Sahn Notebook"
@@ -174,125 +184,11 @@ export default function Hero() {
               />
 
               {/*
-                Right-page overlay — coordinates tuned to notebook.png geometry.
-                Since wrapper aspect ratio is exactly 2:3 matching the image (1024x1536):
-                The spine is at exactly 50%.
-                Right page area: left 54%, width 33%, top 16%, height 68%.
+                The living notebook overlay.
+                Sits absolutely on top of the image, clipped to the right page.
+                Animates independently — notebook floats, writing runs once.
               */}
-              <div
-                className="absolute z-20 select-none pointer-events-none overflow-hidden"
-                style={{
-                  top: "16%",
-                  left: "54%",
-                  width: "33%",
-                  height: "68%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  paddingRight: "1%",
-                }}
-              >
-                {[
-                  {
-                    date: "March 2",
-                    body: ["Need a photographer", "for the tech fest."],
-                    resolved: "Found through Rohan.",
-                  },
-                  {
-                    date: "March 5",
-                    body: ["Looking for AV team", "for mainstage."],
-                    resolved: "Connected by Aniket.",
-                  },
-                  {
-                    date: "March 8",
-                    body: ["Speaker from Bangalore", "needs accommodation."],
-                    resolved: "Hospitality partner sorted.",
-                  },
-                  {
-                    date: "March 11",
-                    body: ["Everything is coming together."],
-                    resolved: null,
-                    heart: true,
-                  },
-                ].map((entry, idx) => (
-                  <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, filter: "blur(12px)", y: 8 }}
-                    animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                    transition={{
-                      delay: entryDelays[idx],
-                      duration: 1.2,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    style={{ display: "flex", flexDirection: "column", gap: "1px" }}
-                  >
-                    {/* Date */}
-                    <span
-                      style={{
-                        fontFamily: "var(--font-shadows-into-light), 'Shadows Into Light', 'Patrick Hand', cursive",
-                        fontSize: "clamp(8px, 1vw, 13px)",
-                        color: "rgba(201,164,112,0.85)",
-                        letterSpacing: "0.04em",
-                        marginBottom: "1px",
-                      }}
-                    >
-                      {entry.date}
-                    </span>
-
-                    {/* Body lines */}
-                    <span
-                      style={{
-                        fontFamily: "var(--font-shadows-into-light), 'Shadows Into Light', 'Patrick Hand', cursive",
-                        fontSize: "clamp(9px, 1.1vw, 15px)",
-                        color: "rgba(255,255,255,0.82)",
-                        lineHeight: 1.32,
-                      }}
-                    >
-                      {entry.body.map((l, li) => (
-                        <React.Fragment key={li}>
-                          {l}
-                          {li < entry.body.length - 1 && <br />}
-                        </React.Fragment>
-                      ))}
-                      {entry.heart && (
-                        <span style={{ color: "rgba(201,164,112,0.75)", marginLeft: "0.4em" }}>
-                          ♥
-                        </span>
-                      )}
-                    </span>
-
-                    {/* Resolved line */}
-                    {entry.resolved && (
-                      <span
-                        style={{
-                          fontFamily: "var(--font-shadows-into-light), 'Shadows Into Light', 'Patrick Hand', cursive",
-                          fontSize: "clamp(8px, 0.95vw, 13px)",
-                          color: "rgba(201,164,112,0.75)",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.3em",
-                          marginTop: "2px",
-                          fontStyle: "italic",
-                        }}
-                      >
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          style={{ width: "0.9em", height: "0.9em", flexShrink: 0 }}
-                        >
-                          <rect x="3" y="3" width="18" height="18" rx="2" />
-                          <path d="m9 12 2 2 4-4" />
-                        </svg>
-                        {entry.resolved}
-                      </span>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
+              <NotebookOverlay />
 
             </motion.div>
           </motion.div>
