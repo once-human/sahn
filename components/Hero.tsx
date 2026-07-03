@@ -117,26 +117,11 @@ export default function Hero() {
               className="w-full h-full relative"
             >
               
-              {/* 
-                Custom Shadows underneath the notebook.
-                Notebook is rotated -3deg, shadows follow it roughly.
-              */}
-              <div className="absolute inset-0 z-0 transform -rotate-[3deg]">
-                {/* Large ambient shadow (Very soft, large, 10% opacity, falls down & right) */}
-                <div className="absolute top-[10%] left-[10%] w-[90%] h-[90%] bg-black/10 blur-[80px] rounded-[20px] translate-x-[50px] translate-y-[50px]" />
-                
-                {/* Medium shadow (Wide, soft, 22% opacity) */}
-                <div className="absolute top-[5%] left-[5%] w-[90%] h-[90%] bg-black/22 blur-[40px] rounded-[10px] translate-x-[30px] translate-y-[30px]" />
-                
-                {/* Contact shadow (Small, very dark, immediately below) */}
-                <div className="absolute top-[2%] left-[2%] w-[95%] h-[95%] bg-black/60 blur-[15px] rounded-[5px] translate-x-[10px] translate-y-[15px]" />
-              </div>
-
               <Image 
                 src="/notebook.png"
                 alt="Sahn Notebook"
                 fill
-                className="object-contain relative z-10 transform -rotate-[3deg]"
+                className="object-contain relative z-10 transform -rotate-[3deg] [filter:drop-shadow(4px_4px_5px_rgba(0,0,0,0.8))_drop-shadow(20px_25px_30px_rgba(0,0,0,0.22))_drop-shadow(40px_50px_60px_rgba(0,0,0,0.1))]"
                 priority
                 sizes="(max-width: 768px) 100vw, 80vw"
               />
