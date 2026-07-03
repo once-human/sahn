@@ -36,10 +36,10 @@ const lineVariants = {
 };
 
 const notebookVariants = {
-  hidden: { opacity: 0, scale: 0.93, filter: "blur(28px)" },
+  hidden: { opacity: 0, scale: 1.116, filter: "blur(28px)" }, // 0.93 * 1.2 = 1.116
   visible: {
     opacity: 1,
-    scale: 1,
+    scale: 1.2,
     filter: "blur(0px)",
     transition: {
       duration: 1.5,
