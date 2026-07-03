@@ -5,7 +5,7 @@
   --color-foreground: #F3ECE5;
   --font-sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-serif: var(--font-cormorant), "Cormorant Garamond", "Cormorant", "Playfair Display", "Didot", "Georgia", serif;
-  --font-handwriting: var(--font-caveat), "Caveat", "Architects Daughter", "Segoe Print", cursive;
+  --font-handwriting: var(--font-kalam), "Kalam", "Patrick Hand", cursive;
 }
 
 body {
