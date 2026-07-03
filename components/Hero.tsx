@@ -104,7 +104,7 @@ export default function Hero() {
           */}
           <motion.div 
             style={{ x, y }} 
-            className="absolute w-[110%] sm:w-[130%] lg:w-[172.5%] max-w-[500px] sm:max-w-[750px] lg:max-w-[1620px] aspect-[4/3] pointer-events-none -ml-[20px] sm:-ml-[50px] lg:-ml-[105px] mt-[20px] sm:mt-[40px] lg:mt-[80px]"
+            className="absolute w-[110%] sm:w-[130%] lg:w-[172.5%] max-w-[500px] sm:max-w-[750px] lg:max-w-[1620px] aspect-[4/3] pointer-events-none -ml-[20px] sm:-ml-[50px] lg:-ml-[105px] mt-[20px] sm:mt-[40px] lg:mt-[80px] transform-gpu will-change-transform"
           >
             {/* Vertical floating only (max 2px, 12s, easeInOut) */}
             <motion.div
@@ -114,14 +114,14 @@ export default function Hero() {
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-              className="w-full h-full relative"
+              className="w-full h-full relative transform-gpu will-change-transform"
             >
               
               <Image 
                 src="/notebook.png"
                 alt="Sahn Notebook"
                 fill
-                className="object-contain relative z-10 transform -rotate-[3deg] [filter:drop-shadow(4px_4px_5px_rgba(0,0,0,0.8))_drop-shadow(20px_25px_30px_rgba(0,0,0,0.22))_drop-shadow(40px_50px_60px_rgba(0,0,0,0.1))]"
+                className="object-contain relative z-10 transform-gpu -rotate-[3deg] [filter:drop-shadow(4px_4px_5px_rgba(0,0,0,0.8))_drop-shadow(20px_25px_30px_rgba(0,0,0,0.22))_drop-shadow(40px_50px_60px_rgba(0,0,0,0.1))] will-change-[transform,filter]"
                 priority
                 sizes="(max-width: 768px) 100vw, 80vw"
               />
