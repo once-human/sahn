@@ -3,8 +3,9 @@ import React from "react";
 export default function Footer() {
   return (
     <footer className="w-full px-12 pb-12 pt-8 flex items-center justify-between text-[11px] font-sans tracking-wide text-[#F3ECE5] opacity-[20%] mt-auto max-w-[1600px] mx-auto relative z-20">
-      <div className="hover:opacity-100 transition-opacity duration-300 cursor-default">
-        &copy; Sahn {new Date().getFullYear()}
+      <div className="hover:opacity-100 transition-opacity duration-300 cursor-default flex items-center gap-1">
+        <span className="text-[14px] leading-none relative -top-[0.5px] select-none">©</span>
+        <span>Sahn {new Date().getFullYear()}</span>
       </div>
       
       <div className="flex items-center gap-8">

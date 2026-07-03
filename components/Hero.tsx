@@ -75,11 +75,6 @@ function AnimatedHeadline({ text }: { text: string }) {
   );
 }
 
-// ── Kalam inline style helper ────────────────────────────────────────────────
-const kalam: React.CSSProperties = {
-  fontFamily: "var(--font-kalam), 'Kalam', 'Patrick Hand', cursive",
-};
-
 // ── Main Component ───────────────────────────────────────────────────────────
 
 export default function Hero() {
@@ -103,7 +98,7 @@ export default function Hero() {
     return () => window.removeEventListener("mousemove", onMove);
   }, [mouseX, mouseY]);
 
-  // Shared notebook entry props
+  // Shared notebook entry delays
   const entryDelays = [0.75, 1.05, 1.35, 1.65];
 
   return (
@@ -113,7 +108,7 @@ export default function Hero() {
     >
       <div className="notebook-bloom" />
 
-      {/* ── Header ── */}
+      {/* ── Header (CTAs removed) ── */}
       <motion.header
         initial={{ opacity: 0, y: -18, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -123,24 +118,12 @@ export default function Hero() {
         <div className="font-sans text-[11px] uppercase tracking-[0.65em] font-medium text-[#F4EEE7]">
           S A H N
         </div>
-        <nav className="flex items-center gap-6 lg:gap-12 text-[#F2ECE5] text-[13px] font-medium tracking-wide">
-          <a href="#" className="opacity-70 hover:opacity-100 transition-opacity duration-300">
-            About
-          </a>
-          <a
-            href="#"
-            className="flex items-center gap-[6px] border border-white/15 px-[16px] py-[10px] rounded-[10px] hover:border-white/35 hover:bg-white/5 backdrop-blur-sm transition-all duration-300"
-          >
-            <span className="opacity-90">Join early access</span>
-            <span className="w-[5px] h-[5px] rounded-full bg-white/50 block ml-1" />
-          </a>
-        </nav>
       </motion.header>
 
       {/* ── Main Content ── */}
       <div className="flex-1 w-full max-w-[1600px] mx-auto flex flex-col lg:flex-row mt-24 lg:mt-0 relative z-10">
 
-        {/* Left Column */}
+        {/* Left Column (CTA removed) */}
         <div className="w-full lg:w-[45%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-[5%] pt-10 lg:pb-0 pb-12 z-20">
           <h1 className="font-serif text-[#F3ECE5] text-[4.5rem] leading-[0.95] font-[500] tracking-tight mb-6 flex flex-wrap">
             <span className="w-full flex flex-wrap">
@@ -148,7 +131,7 @@ export default function Hero() {
             </span>
           </h1>
 
-          <div className="flex flex-col gap-[18px] text-[#F3ECE5] opacity-[58%] text-[1.05rem] leading-[1.6] max-w-[28rem] font-sans mb-12">
+          <div className="flex flex-col gap-[18px] text-[#F3ECE5] opacity-[58%] text-[1.05rem] leading-[1.6] max-w-[28rem] font-sans">
             {[
               "It comes to life with the right people.",
               "Sahn helps organizers find the people they can trust, before the event begins.",
@@ -164,22 +147,6 @@ export default function Hero() {
               </motion.p>
             ))}
           </div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ delay: 1.0, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <a href="#" className="group inline-flex items-center text-[#F3ECE5] text-[15px] font-medium relative">
-              <span className="relative pb-1">
-                Join early access
-                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#F2ECE5]/30 origin-left transition-transform duration-400 ease-out group-hover:scale-x-110" />
-              </span>
-              <span className="ml-4 transform transition-transform duration-400 ease-out group-hover:translate-x-[4px] inline-block font-serif text-lg pb-1">
-                →
-              </span>
-            </a>
-          </motion.div>
         </div>
 
         {/* Right Column — Notebook */}
@@ -189,7 +156,7 @@ export default function Hero() {
             variants={notebookVariants}
             initial="hidden"
             animate="visible"
-            className="absolute w-[110%] sm:w-[130%] lg:w-[172.5%] max-w-[500px] sm:max-w-[750px] lg:max-w-[1620px] aspect-[4/3] pointer-events-none -ml-[20px] sm:-ml-[50px] lg:-ml-[105px] mt-[20px] sm:mt-[40px] lg:mt-[80px] transform-gpu will-change-transform"
+            className="absolute w-[55%] sm:w-[65%] lg:w-[86.25%] max-w-[250px] sm:max-w-[375px] lg:max-w-[810px] aspect-[2/3] pointer-events-none -ml-[10px] sm:-ml-[25px] lg:-ml-[52.5px] mt-[20px] sm:mt-[40px] lg:mt-[80px] transform-gpu will-change-transform"
           >
             {/* Floating + rotation wrapper */}
             <motion.div
@@ -208,22 +175,21 @@ export default function Hero() {
 
               {/*
                 Right-page overlay — coordinates tuned to notebook.png geometry.
-                PNG is 3:4-ish portrait in a 4:3 landscape container.
-                The rendered image sits centered; right page occupies roughly:
-                  horizontal: 51% → 86% of container width
-                  vertical:   14% → 88% of container height
+                Since wrapper aspect ratio is exactly 2:3 matching the image (1024x1536):
+                The spine is at exactly 50%.
+                Right page area: left 54%, width 33%, top 16%, height 68%.
               */}
               <div
                 className="absolute z-20 select-none pointer-events-none overflow-hidden"
                 style={{
-                  top: "14%",
-                  left: "51%",
-                  width: "35%",
-                  height: "74%",
+                  top: "16%",
+                  left: "54%",
+                  width: "33%",
+                  height: "68%",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  paddingRight: "2%",
+                  paddingRight: "1%",
                 }}
               >
                 {[
@@ -251,11 +217,11 @@ export default function Hero() {
                 ].map((entry, idx) => (
                   <motion.div
                     key={idx}
-                    initial={{ opacity: 0, filter: "blur(10px)", y: 6 }}
+                    initial={{ opacity: 0, filter: "blur(12px)", y: 8 }}
                     animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
                     transition={{
                       delay: entryDelays[idx],
-                      duration: 1.1,
+                      duration: 1.2,
                       ease: [0.16, 1, 0.3, 1],
                     }}
                     style={{ display: "flex", flexDirection: "column", gap: "1px" }}
@@ -263,7 +229,7 @@ export default function Hero() {
                     {/* Date */}
                     <span
                       style={{
-                        ...kalam,
+                        fontFamily: "var(--font-shadows-into-light), 'Shadows Into Light', 'Patrick Hand', cursive",
                         fontSize: "clamp(8px, 1vw, 13px)",
                         color: "rgba(201,164,112,0.85)",
                         letterSpacing: "0.04em",
@@ -276,7 +242,7 @@ export default function Hero() {
                     {/* Body lines */}
                     <span
                       style={{
-                        ...kalam,
+                        fontFamily: "var(--font-shadows-into-light), 'Shadows Into Light', 'Patrick Hand', cursive",
                         fontSize: "clamp(9px, 1.1vw, 15px)",
                         color: "rgba(255,255,255,0.82)",
                         lineHeight: 1.32,
@@ -299,7 +265,7 @@ export default function Hero() {
                     {entry.resolved && (
                       <span
                         style={{
-                          ...kalam,
+                          fontFamily: "var(--font-shadows-into-light), 'Shadows Into Light', 'Patrick Hand', cursive",
                           fontSize: "clamp(8px, 0.95vw, 13px)",
                           color: "rgba(201,164,112,0.75)",
                           display: "flex",
