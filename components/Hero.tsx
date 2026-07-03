@@ -33,7 +33,7 @@ export default function Hero() {
   }, [mouseX, mouseY]);
 
   return (
-    <div ref={containerRef} className="relative w-full h-[100vh] overflow-hidden flex flex-col items-center">
+    <div ref={containerRef} className="relative w-full h-[100vh] overflow-visible z-20 flex flex-col items-center">
       
       {/* 
         This bloom sits behind everything in the Hero to give the notebook 
@@ -104,7 +104,7 @@ export default function Hero() {
           */}
           <motion.div 
             style={{ x, y }} 
-            className="relative w-[115%] max-w-[1080px] aspect-[4/3] flex-shrink-0 -ml-[70px] -mt-[35px] pointer-events-none"
+            className="absolute w-[110%] sm:w-[130%] lg:w-[172.5%] max-w-[500px] sm:max-w-[750px] lg:max-w-[1620px] aspect-[4/3] pointer-events-none -ml-[20px] sm:-ml-[50px] lg:-ml-[105px] mt-[20px] sm:mt-[40px] lg:mt-[80px]"
           >
             {/* Vertical floating only (max 2px, 12s, easeInOut) */}
             <motion.div
