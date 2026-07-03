@@ -123,7 +123,7 @@ export default function Hero() {
 
         {/* Left Column */}
         <div className="w-full lg:w-[45%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-[5%] pt-10 lg:pb-0 pb-12 z-20">
-          <h1 className="font-serif text-[#F3ECE5] text-[4.5rem] leading-[0.95] font-[500] tracking-tight mb-6 flex flex-wrap">
+          <h1 className="font-serif text-[#F3ECE5] text-[3rem] sm:text-[3.5rem] lg:text-[4.5rem] leading-[0.95] font-[500] tracking-tight mb-6 flex flex-wrap">
             <span className="w-full flex flex-wrap">
               <AnimatedHeadline text="Every great event begins with a plan." />
             </span>

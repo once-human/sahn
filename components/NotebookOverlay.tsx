@@ -2,508 +2,714 @@
 
 import React, { useEffect, useState } from "react";
 
-// ─── CSS keyframes ─────────────────────────────────────────────────────────────
-// writeClip:    the main "pen writing left-to-right" reveal for all text
-// drawBox:      SVG stroke animation — checkbox rectangle (perimeter ≈ 64)
-// drawMark:     SVG stroke animation — checkmark polyline (length ≈ 22)
-// drawEllipse:  SVG stroke animation — circle around "Venue confirmed." (≈ 260)
-// drawCurve:    SVG stroke animation — curved underline (length ≈ 105)
-// drawArrow:    SVG stroke animation — tiny margin arrow (length ≈ 18)
-
+// ─────────────────────────────────────────────────────────────────────────────
+// CSS KEYFRAMES
+// charReveal  — left-to-right clip sweep, one character at a time (pen feel)
+// drawStroke  — SVG stroke-dashoffset → 0 (doodles, circles, underlines)
+// ─────────────────────────────────────────────────────────────────────────────
 const KF = `
-@keyframes writeClip {
-  from { clip-path: inset(0 100% 0 0); }
-  to   { clip-path: inset(0   0% 0 0); }
+@keyframes charReveal {
+  from { clip-path: inset(0 110% 0 0); }
+  to   { clip-path: inset(0  -5% 0 0); }
 }
-@keyframes drawBox {
-  from { stroke-dashoffset: 64;  }
-  to   { stroke-dashoffset: 0;   }
-}
-@keyframes drawMark {
-  from { stroke-dashoffset: 22;  }
-  to   { stroke-dashoffset: 0;   }
-}
-@keyframes drawEllipse {
-  from { stroke-dashoffset: 260; }
-  to   { stroke-dashoffset: 0;   }
-}
-@keyframes drawCurve {
-  from { stroke-dashoffset: 105; }
-  to   { stroke-dashoffset: 0;   }
-}
-@keyframes drawArrow {
-  from { stroke-dashoffset: 18;  }
-  to   { stroke-dashoffset: 0;   }
+@keyframes drawStroke {
+  to   { stroke-dashoffset: 0; }
 }
 `;
 
-// ─── Easing + font stacks ─────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// DESIGN TOKENS
+// ─────────────────────────────────────────────────────────────────────────────
 
-// Slightly decelerated curve — pen slows slightly at end of each word
-const EASE = "cubic-bezier(0.22, 0.0, 0.08, 1.0)";
-
-// Person 1: organized, dates + tasks — Shadows Into Light (airy, neat, fine-liner feel)
+// Person 1 — Onkar  (Shadows Into Light: thin, airy, organised)
 const F1 = "var(--font-shadows-into-light), 'Shadows Into Light', cursive";
-// Person 2: confirmations, recommendations — Patrick Hand (slightly rounder, warmer)
+// Person 2 — Friend (Patrick Hand: casual, rounder, warm)
 const F2 = "var(--font-patrick-hand), 'Patrick Hand', cursive";
 
-// Ink colours
-const INK1 = "rgba(239, 231, 219, 0.90)"; // warm white — Person 1
-const INK2 = "rgba(196, 154, 98,  0.88)"; // warm gold  — Person 2
-const DATE_COLOR = "rgba(196, 154, 98, 0.78)";
-const MARGIN_COLOR = "rgba(196, 154, 98, 0.22)";
-const LAST_COLOR = "rgba(239, 231, 219, 0.28)";
+const FS1      = "clamp(10px, 1.05vw, 13.5px)";   // body — person 1
+const FS2      = "clamp(9.5px, 1.0vw, 13px)";      // body — person 2
+const FS_HEAD  = "clamp(13px, 1.4vw, 18px)";        // static heading
+const FS_SUB   = "clamp(10px, 1.0vw, 13px)";        // static sub-lines
+const FS_MARGIN = "clamp(6px, 0.58vw, 7.5px)";      // margin note
 
-// ─── Tiny helper: return animation + clip-path style for text reveal ──────────
+const INK1 = "rgba(237,231,219,0.91)";   // warm white   — Onkar
+const INK2 = "rgba(196,154, 98,0.88)";   // warm gold    — Friend
 
-function wr(at: number, dur: number, on: boolean): React.CSSProperties {
-  return {
-    clipPath: "inset(0 100% 0 0)",
-    animation: on ? `writeClip ${dur}ms ${EASE} ${at}ms both` : "none",
-  };
+// ─────────────────────────────────────────────────────────────────────────────
+// CHARACTER ANIMATION ENGINE
+// Each non-space character gets its own left→right clip sweep lasting ~38ms.
+// Delays are pre-computed so the total segment fills `durMs` exactly.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Relative stroke weight for each character glyph. */
+function cw(c: string): number {
+  if (c === " ") return 0;                                          // instant
+  if (".,;:!?'\"()".includes(c)) return 0.42;
+  if ("il1|ɪ".includes(c))       return 0.60;
+  if ("tjfr".includes(c))        return 0.75;
+  if ("acenvos".includes(c))     return 0.95;
+  if ("bdhkpquxy".includes(c))   return 1.10;
+  if ("gz".includes(c))          return 1.15;
+  if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ".includes(c)) return 1.25;
+  if ("mM".includes(c))          return 1.40;
+  if ("wW".includes(c))          return 1.35;
+  if ("→↓←↑".includes(c))       return 0.80;
+  return 1.0;
 }
 
-// Return animation style for SVG stroke-draw
-function sa(kf: string, at: number, dur: number, on: boolean): React.CSSProperties {
-  return { animation: on ? `${kf} ${dur}ms ease ${at}ms both` : "none" };
+interface CE { char: string; delay: number; }
+
+/** Build a character sequence where total timing ≈ durMs. */
+function seq(text: string, startMs: number, durMs: number): CE[] {
+  const chars = [...text];
+  const weights = chars.map(cw);
+  const total   = weights.reduce((a, b) => a + b, 0);
+  const mpu     = total > 0 ? durMs / total : 0;
+  let t = 0;
+  return chars.map((char, i) => {
+    const d = { char, delay: startMs + t };
+    t += weights[i] * mpu;
+    return d;
+  });
 }
 
-// ─── Date label ───────────────────────────────────────────────────────────────
-
-function ds(rot: number): React.CSSProperties {
-  return {
-    display: "block",
-    fontFamily: F1,
-    fontSize: "clamp(7.5px, 0.75vw, 10.5px)",
-    color: DATE_COLOR,
-    letterSpacing: "0.12em",
-    textTransform: "uppercase" as const,
-    transform: `rotate(${rot}deg)`,
-    transformOrigin: "left center",
-    marginBottom: "3px",
-  };
+// ─────────────────────────────────────────────────────────────────────────────
+// CHAR RENDERER  — renders a pre-built CE[] as animated inline spans
+// ─────────────────────────────────────────────────────────────────────────────
+function Chars({ s, on }: { s: CE[]; on: boolean }) {
+  return (
+    <>
+      {s.map(({ char, delay }, i) =>
+        char === " " ? (
+          <span key={i} style={{ display: "inline-block" }}>&nbsp;</span>
+        ) : (
+          <span
+            key={i}
+            style={{
+              display: "inline-block",
+              clipPath: "inset(0 110% 0 0)",
+              animation: on ? `charReveal 38ms linear ${delay}ms both` : "none",
+            }}
+          >
+            {char}
+          </span>
+        )
+      )}
+    </>
+  );
 }
 
-// ─── Body line ────────────────────────────────────────────────────────────────
-
-function ls(rot: number, p: 1 | 2 = 1): React.CSSProperties {
-  return {
-    display: "block",
-    fontFamily: p === 1 ? F1 : F2,
-    fontSize: "clamp(9.5px, 0.95vw, 13px)",
-    color: p === 1 ? INK1 : INK2,
-    lineHeight: 1.52,
-    transform: `rotate(${rot}deg)`,
-    transformOrigin: "left center",
-    wordBreak: "break-word" as const,
-    overflowWrap: "break-word" as const,
-  };
+// ─────────────────────────────────────────────────────────────────────────────
+// WRITTEN LINE  — renders one line of animated handwriting
+// ─────────────────────────────────────────────────────────────────────────────
+interface WLProps {
+  text  : string;
+  s     : number;         // startMs
+  d     : number;         // durMs
+  p     : 1 | 2;          // person
+  on    : boolean;
+  rot?  : number;         // slight tilt in degrees
+  style?: React.CSSProperties;
 }
 
-// ─── CheckRow — checkbox SVG + checkmark SVG + confirmation text ──────────────
-
-interface CR {
-  boxAt: number;
-  markAt: number;
-  textAt: number;
-  textDur: number;
-  text: string;
-  rot: number;
-  on: boolean;
-}
-
-function CheckRow({ boxAt, markAt, textAt, textDur, text, rot, on }: CR) {
+function WL({ text, s, d, p, on, rot = 0, style }: WLProps) {
   return (
     <div
       style={{
-        display: "flex",
-        alignItems: "flex-start",
-        gap: "5px",
-        marginTop: "3px",
-        transform: `rotate(${rot}deg)`,
-        transformOrigin: "left center",
+        display          : "block",
+        fontFamily       : p === 1 ? F1 : F2,
+        fontSize         : p === 1 ? FS1 : FS2,
+        color            : p === 1 ? INK1 : INK2,
+        lineHeight       : 1.52,
+        transform        : rot ? `rotate(${rot}deg)` : undefined,
+        transformOrigin  : "left center",
+        marginBottom     : "0.5px",
+        ...style,
       }}
     >
-      {/* Box + checkmark drawn together in one SVG */}
-      <svg
-        width="13"
-        height="13"
-        viewBox="0 0 16 16"
-        fill="none"
-        style={{ flexShrink: 0, marginTop: "2px" }}
-      >
-        {/* Checkbox rectangle — draws first */}
-        <rect
-          x="1.5"
-          y="1.5"
-          width="13"
-          height="13"
-          rx="1.5"
-          stroke="#C49A62"
-          strokeWidth="1.2"
-          strokeDasharray="64"
-          strokeDashoffset="64"
-          style={sa("drawBox", boxAt, 350, on)}
-        />
-        {/* Checkmark — draws after box completes */}
-        <polyline
-          points="3.5,8.5 6.5,12 12.5,4"
-          fill="none"
-          stroke="#C49A62"
-          strokeWidth="1.3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeDasharray="22"
-          strokeDashoffset="22"
-          style={sa("drawMark", markAt, 300, on)}
-        />
-      </svg>
-
-      {/* Confirmation text — Person 2 writing */}
-      <span
-        style={{
-          fontFamily: F2,
-          fontSize: "clamp(9px, 0.88vw, 12px)",
-          color: INK2,
-          lineHeight: 1.45,
-          display: "inline-block",
-          clipPath: "inset(0 100% 0 0)",
-          animation: on
-            ? `writeClip ${textDur}ms ${EASE} ${textAt}ms both`
-            : "none",
-        }}
-      >
-        {text}
-      </span>
+      <Chars s={seq(text, s, d)} on={on} />
     </div>
   );
 }
 
-// ─── Ellipse doodle — wraps around "Venue confirmed." ────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// SVG UTILITIES
+// ─────────────────────────────────────────────────────────────────────────────
 
-function EllipseDoodle({ at, on }: { at: number; on: boolean }) {
-  return (
-    <svg
-      viewBox="0 0 120 22"
-      preserveAspectRatio="none"
-      style={{
-        position: "absolute",
-        top: "-3px",
-        left: "-5px",
-        width: "calc(100% + 10px)",
-        height: "calc(100% + 7px)",
-        overflow: "visible",
-        pointerEvents: "none",
-        zIndex: 1,
-      }}
-    >
-      <ellipse
-        cx="60"
-        cy="11"
-        rx="57"
-        ry="9.5"
-        fill="none"
-        stroke="#C49A62"
-        strokeWidth="1.0"
-        strokeLinecap="round"
-        strokeDasharray="260"
-        strokeDashoffset="260"
-        style={sa("drawEllipse", at, 720, on)}
-      />
-    </svg>
-  );
+/** CSS style for animated SVG stroke (drives drawStroke keyframe). */
+function da(at: number, dur: number, dash: number, on: boolean): React.CSSProperties {
+  return {
+    strokeDasharray : dash,
+    strokeDashoffset: dash,
+    animation       : on ? `drawStroke ${dur}ms ease ${at}ms both` : "none",
+  } as React.CSSProperties;
 }
 
-// ─── Curved underline — under "Everything's ready." ───────────────────────────
-
-function CurvedUnderline({ at, on }: { at: number; on: boolean }) {
+// ── Imperfect circle (ClayWorks) ─────────────────────────────────────────────
+function RoughCircle({ at, dur, on }: { at: number; dur: number; on: boolean }) {
   return (
     <svg
-      viewBox="0 0 100 6"
+      viewBox="0 0 110 28"
       preserveAspectRatio="none"
       style={{
-        display: "block",
-        width: "58%",
-        height: "4px",
-        marginTop: "1px",
-        overflow: "visible",
-        pointerEvents: "none",
+        position: "absolute", top: "-5px", left: "-8px",
+        width: "calc(100% + 16px)", height: "calc(100% + 10px)",
+        overflow: "visible", pointerEvents: "none",
       }}
     >
       <path
-        d="M 0 3 Q 25 1.5 50 3 Q 75 4.5 100 3"
-        fill="none"
-        stroke="rgba(196,154,98,0.48)"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeDasharray="105"
-        strokeDashoffset="105"
-        style={sa("drawCurve", at, 520, on)}
+        d="M 55,2 C 93,-2 114,6 111,14 C 108,22 91,29 55,27 C 19,29 -4,22 0,14 C -4,6 17,0 55,2 Z"
+        fill="none" stroke={INK2} strokeWidth="1.1" strokeLinecap="round"
+        style={da(at, dur, 310, on)}
       />
     </svg>
   );
 }
 
-// ─── Tiny arrow — sits next to the "check availability" margin note ──────────
-
-function TinyArrow({ at, on }: { at: number; on: boolean }) {
+// ── Rough oval (Extension boards) ─────────────────────────────────────────────
+function RoughOval({ at, dur, on }: { at: number; dur: number; on: boolean }) {
   return (
     <svg
-      width="10"
-      height="8"
-      viewBox="0 0 10 8"
+      viewBox="0 0 120 26"
+      preserveAspectRatio="none"
+      style={{
+        position: "absolute", top: "-4px", left: "-7px",
+        width: "calc(100% + 14px)", height: "calc(100% + 8px)",
+        overflow: "visible", pointerEvents: "none",
+      }}
+    >
+      <path
+        d="M 60,2 C 101,-2 124,6 121,13 C 118,20 100,26 60,25 C 20,26 -2,20 -1,13 C -2,6 19,0 60,2 Z"
+        fill="none" stroke={INK2} strokeWidth="1.0" strokeLinecap="round"
+        style={da(at, dur, 295, on)}
+      />
+    </svg>
+  );
+}
+
+// ── Wavy underline ─────────────────────────────────────────────────────────────
+function Underline({
+  at, dur, on, color = INK1,
+}: { at: number; dur: number; on: boolean; color?: string }) {
+  return (
+    <svg
+      viewBox="0 0 100 4"
+      preserveAspectRatio="none"
+      style={{
+        display: "block", width: "100%", height: "4px",
+        overflow: "visible", pointerEvents: "none",
+      }}
+    >
+      <path
+        d="M 0,2 Q 25,3 50,2 Q 75,1 100,2"
+        fill="none" stroke={color} strokeWidth="1.15" strokeLinecap="round"
+        style={da(at, dur, 103, on)}
+      />
+    </svg>
+  );
+}
+
+// ── Cross-out stroke ──────────────────────────────────────────────────────────
+function CrossOut({ at, dur, on }: { at: number; dur: number; on: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 100 2"
+      preserveAspectRatio="none"
+      style={{
+        position: "absolute", top: "52%", left: "-1px",
+        width: "calc(100% + 2px)", height: "3px",
+        overflow: "visible", pointerEvents: "none",
+      }}
+    >
+      <line
+        x1="0" y1="1" x2="100" y2="1"
+        stroke="rgba(237,231,219,0.60)"
+        strokeWidth="1.25" strokeLinecap="round"
+        style={da(at, dur, 104, on)}
+      />
+    </svg>
+  );
+}
+
+// ── Tiny phone handset doodle ─────────────────────────────────────────────────
+function PhoneDoodle({ at, dur, on }: { at: number; dur: number; on: boolean }) {
+  return (
+    <svg
+      width="11" height="11"
+      viewBox="0 0 12 12"
       fill="none"
-      style={{
-        display: "inline-block",
-        verticalAlign: "middle",
-        marginLeft: "2px",
-        overflow: "visible",
-        pointerEvents: "none",
-      }}
+      style={{ display: "inline-block", verticalAlign: "middle", overflow: "visible" }}
     >
       <path
-        d="M 0 4 L 7 4 M 4.5 1.5 L 7 4 L 4.5 6.5"
-        stroke="rgba(196,154,98,0.3)"
-        strokeWidth="1"
+        d="M 3,1 C 2.2,1 1.5,1.8 1.5,2.8 L 1.5,4.5 C 2,6.1 3,7 4.5,7.5 C 5.1,7.7 5.6,7.5 6,7 L 6.4,6.5 C 7,5.9 7.5,6 8,6.5 L 9,7.6 C 9.5,8.1 9.5,8.6 9,9.1 L 8.5,9.6 C 8,10.1 7.8,10.9 8.1,11.5 C 8.7,11.5 9.3,11.2 9.7,10.8 C 10.6,9.8 11,8.8 11,7.8 C 11,5.8 9.5,4.2 8.5,3.2 C 7.5,2.2 5.9,1.3 4.4,1.1 C 3.9,1.03 3.4,1 3,1 Z"
+        stroke="rgba(196,154,98,0.45)"
+        strokeWidth="0.7"
         strokeLinecap="round"
         strokeLinejoin="round"
-        strokeDasharray="18"
-        strokeDashoffset="18"
-        style={sa("drawArrow", at, 350, on)}
+        strokeDasharray="55"
+        strokeDashoffset="55"
+        style={{ animation: on ? `drawStroke ${dur}ms ease ${at}ms both` : "none" }}
       />
     </svg>
   );
 }
 
-// ─── Margin notes data ────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// PAGE TEXTURE ELEMENTS  (static, visible from load)
+// ─────────────────────────────────────────────────────────────────────────────
 
-const MARGIN = [
-  { text: "call tomorrow",        at: 1600,  dur: 380, top: "3.5%", rot:  1.1, arrow: false },
-  { text: "check availability",   at: 7100,  dur: 490, top: "30%",  rot: -0.7, arrow: true  },
-  { text: "confirm payment",      at: 12800, dur: 400, top: "52%",  rot:  0.9, arrow: false },
-  { text: "ask for invoice",      at: 18800, dur: 420, top: "69%",  rot: -1.0, arrow: false },
-  { text: "don't forget badges",  at: 22300, dur: 560, top: "84%",  rot:  0.8, arrow: false },
-];
+function CoffeeStain() {
+  return (
+    <div
+      style={{
+        position: "absolute", bottom: "14%", left: "3.5%",
+        width: "clamp(25px,2.9vw,38px)", height: "clamp(25px,2.9vw,38px)",
+        borderRadius: "50%",
+        border: "1.5px solid rgba(101,67,33,0.13)",
+        boxShadow: "inset 0 0 6px rgba(101,67,33,0.07)",
+        pointerEvents: "none",
+      }}
+    />
+  );
+}
 
-// ─── Main component ───────────────────────────────────────────────────────────
+function GraphiteSmudge() {
+  return (
+    <div
+      style={{
+        position: "absolute", top: "72%", left: "11%",
+        width: "clamp(20px,2.3vw,32px)", height: "clamp(7px,0.8vw,10px)",
+        borderRadius: "50%",
+        background: "rgba(188,188,188,0.04)",
+        filter: "blur(3px)",
+        transform: "rotate(-13deg)",
+        pointerEvents: "none",
+      }}
+    />
+  );
+}
 
+function Fingerprint() {
+  return (
+    <svg
+      viewBox="0 0 26 32"
+      fill="none"
+      style={{
+        position: "absolute", top: "61%", right: "4%",
+        width: "clamp(15px,1.7vw,22px)", height: "clamp(19px,2.1vw,28px)",
+        opacity: 0.045,
+        transform: "rotate(8deg)",
+        pointerEvents: "none",
+      }}
+    >
+      {[
+        "M 13,16 Q 9,13 9,10 Q 9,7 13,7 Q 17,7 17,10 Q 17,13 13,16",
+        "M 13,20 Q 6,14 6,9 Q 6,4 13,4 Q 20,4 20,9 Q 20,14 13,20",
+        "M 13,24 Q 3,15 3,8 Q 3,1 13,1 Q 23,1 23,8 Q 23,15 13,24",
+        "M 13,28 Q 0,16 0,7 Q 0,-2 13,-2 Q 26,-2 26,7 Q 26,16 13,28",
+      ].map((d, i) => (
+        <path key={i} d={d} stroke="rgba(210,190,160,1)" strokeWidth="0.85" strokeLinecap="round" />
+      ))}
+    </svg>
+  );
+}
+
+function FoldedCorner() {
+  return (
+    <div
+      style={{
+        position: "absolute", bottom: "2.5%", right: "1.5%",
+        width: "clamp(10px,1.2vw,16px)", height: "clamp(10px,1.2vw,16px)",
+        background: "linear-gradient(225deg,rgba(44,35,27,0.55) 0%,rgba(37,29,22,0.28) 45%,transparent 72%)",
+        clipPath: "polygon(100% 0,100% 100%,0 100%)",
+        pointerEvents: "none",
+      }}
+    />
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STICKY NOTE  (tape static, handwriting animated)
+// ─────────────────────────────────────────────────────────────────────────────
+function StickyNote({ on }: { on: boolean }) {
+  const fs = "clamp(7px,0.7vw,9px)";
+  return (
+    <div
+      style={{
+        position: "absolute", top: "37%", left: "67%",
+        width: "clamp(50px,5.8vw,76px)",
+        background: "rgba(242,233,212,0.07)",
+        border: "0.5px solid rgba(242,233,212,0.06)",
+        borderRadius: "1px",
+        padding: "clamp(4px,0.42vw,6px) clamp(5px,0.5vw,7px)",
+        transform: "rotate(2.2deg)",
+        pointerEvents: "none",
+        zIndex: 25,
+      }}
+    >
+      {/* Tape strip — static, never animated */}
+      <div
+        style={{
+          position: "absolute", top: "-5px", left: "18%",
+          width: "32%", height: "8px",
+          background: "rgba(242,233,212,0.07)",
+          borderRadius: "1px",
+          transform: "rotate(-0.6deg)",
+        }}
+      />
+      {/* Handwritten text */}
+      <div style={{ fontFamily: F1, fontSize: fs, color: INK1, lineHeight: 1.4 }}>
+        <div style={{ display: "block" }}>
+          <Chars s={seq("Remember", 88000, 1000)} on={on} />
+        </div>
+        <div style={{ display: "block" }}>
+          <Chars s={seq("name badges.", 89100, 900)} on={on} />
+        </div>
+        {/* Small star */}
+        <div
+          style={{
+            fontSize: "clamp(6px,0.6vw,7.5px)",
+            color: "rgba(196,154,98,0.30)",
+            marginTop: "2px",
+            display: "block",
+          }}
+        >
+          <span
+            style={{
+              display: "inline-block",
+              clipPath: "inset(0 110% 0 0)",
+              animation: on ? "charReveal 38ms linear 90100ms both" : "none",
+            }}
+          >
+            ☆
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MARGIN NOTE  (left margin of right page, appears at 61s)
+// ─────────────────────────────────────────────────────────────────────────────
+function MarginNote({ on }: { on: boolean }) {
+  return (
+    <div
+      style={{
+        position: "absolute", top: "17%", left: "52.5%",
+        fontFamily: F1,
+        fontSize: FS_MARGIN,
+        color: "rgba(237,231,219,0.24)",
+        transform: "rotate(-0.9deg)",
+        lineHeight: 1.4,
+        whiteSpace: "nowrap",
+        pointerEvents: "none",
+        zIndex: 15,
+      }}
+    >
+      <div style={{ display: "block" }}>
+        <Chars s={seq("Call Sriya", 61000, 900)} on={on} />
+      </div>
+      <div style={{ display: "block" }}>
+        <Chars s={seq("tomorrow.", 61900, 650)} on={on} />
+      </div>
+      <div style={{ marginTop: "3px", display: "flex", alignItems: "center" }}>
+        <PhoneDoodle at={63000} dur={600} on={on} />
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// STATIC CONTENT  (already written before animation — visible from load)
+// ─────────────────────────────────────────────────────────────────────────────
+function StaticContent() {
+  return (
+    <div>
+      {/* Event heading — larger */}
+      <div
+        style={{
+          fontFamily: F1,
+          fontSize: FS_HEAD,
+          color: INK1,
+          lineHeight: 1.3,
+          letterSpacing: "0.01em",
+          marginBottom: "2px",
+        }}
+      >
+        Design Systems Meetup
+      </div>
+
+      {/* Sub-details */}
+      {["Bengaluru", "Saturday \u2022 6:30 PM"].map((line, i) => (
+        <div
+          key={i}
+          style={{
+            fontFamily: F1,
+            fontSize: FS_SUB,
+            color: INK1,
+            opacity: 0.80,
+            lineHeight: 1.5,
+          }}
+        >
+          {line}
+        </div>
+      ))}
+
+      {/* → 180–200 people with static underline */}
+      <div
+        style={{
+          display: "inline-block",
+          fontFamily: F1,
+          fontSize: FS_SUB,
+          color: INK1,
+          opacity: 0.80,
+          lineHeight: 1.5,
+        }}
+      >
+        {"\u2192"}&nbsp;180{"\u2013"}200 people
+        <div
+          style={{
+            height: "1px",
+            background: "rgba(237,231,219,0.26)",
+            marginTop: "1px",
+            borderRadius: "0.5px",
+          }}
+        />
+      </div>
+
+      <div style={{ height: "clamp(7px,0.65vw,11px)" }} />
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LEFT PAGE
+// ─────────────────────────────────────────────────────────────────────────────
+function LeftPage({ on }: { on: boolean }) {
+  // Deterministic micro-rotation per line (feels handwritten, not robotic)
+  const r = (n: number) => (((n * 7) % 9) - 4) * 0.07;
+  const gap = <div style={{ height: "clamp(3px,0.32vw,5px)" }} />;
+  const INDENT = { paddingLeft: "1.05em" } as React.CSSProperties;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: "9%", left: "4%", width: "43%", height: "82%",
+        overflow: "hidden",
+        zIndex: 10,
+      }}
+    >
+      {/* Textures live on left page */}
+      <CoffeeStain />
+      <GraphiteSmudge />
+
+      <div style={{ paddingLeft: "5%", paddingRight: "3%", paddingTop: "1%" }}>
+        {/* ── Static ── */}
+        <StaticContent />
+
+        {/* ── 3.0s  Need venue  (Onkar, 2.5s) ── */}
+        <WL text="Need venue" s={3000} d={2500} p={1} on={on} rot={r(1)} />
+
+        {/* ── 6.5s  → Ask Rishi  (Onkar, 1.5s) ── */}
+        <WL text="\u2192 Ask Rishi" s={6500} d={1500} p={1} on={on} rot={r(2)} style={INDENT} />
+
+        {/* ── 9.0s  ClayWorks, Indiranagar?  (Friend, 2.0s) + circle at 11.8s ── */}
+        <div style={{ position: "relative", display: "inline-block", marginBottom: "0.5px" }}>
+          <WL
+            text="ClayWorks, Indiranagar?"
+            s={9000} d={2000} p={2} on={on} rot={r(3)}
+            style={{ display: "inline-block" }}
+          />
+          <RoughCircle at={11800} dur={900} on={on} />
+        </div>
+
+        {gap}
+
+        {/* ── 15.5s  Need AV  (Onkar, 2.0s) ── */}
+        <WL text="Need AV" s={15500} d={2000} p={1} on={on} rot={r(4)} />
+
+        {/* ── 18.8s  → Navaneeth knows someone.  (Friend, 2.3s) ── */}
+        <WL text="\u2192 Navaneeth knows someone." s={18800} d={2300} p={2} on={on} rot={r(5)} style={INDENT} />
+
+        {/* ── 22.1s  Used them for React Bangalore.  (Friend, 2.4s) ── */}
+        <WL text="Used them for React Bangalore." s={22100} d={2400} p={2} on={on} rot={r(6)} style={INDENT} />
+
+        {gap}
+
+        {/* ── 26.5s  Need photographer  (Onkar, 2.4s) ── */}
+        <WL text="Need photographer" s={26500} d={2400} p={1} on={on} rot={r(7)} />
+
+        {/* ── 31.2s  → Ask Ananya.  (Friend, 1.8s) ── */}
+        <WL text="\u2192 Ask Ananya." s={31200} d={1800} p={2} on={on} rot={r(8)} style={INDENT} />
+
+        {/* ── 33.3s  She worked with Atharva last month.  (Friend, 2.8s) ── */}
+        <WL text="She worked with Atharva last month." s={33300} d={2800} p={2} on={on} rot={r(9)} style={INDENT} />
+
+        {gap}
+
+        {/* ── 37.8s  Met Karthik.  (Onkar, 1.7s) ── */}
+        <WL text="Met Karthik." s={37800} d={1700} p={1} on={on} rot={r(10)} />
+
+        {/* ── 39.8s  Loved his work.  (Onkar, 1.8s) + underline at 42s ── */}
+        <div>
+          <WL text="Loved his work." s={39800} d={1800} p={1} on={on} rot={r(11)} />
+          <div style={{ width: "clamp(48px,6.5vw,84px)" }}>
+            <Underline at={42000} dur={400} on={on} />
+          </div>
+        </div>
+
+        {gap}
+
+        {/* ── 45.0s  Coffee?  (Friend, 1.0s) ── */}
+        <WL text="Coffee?" s={45000} d={1000} p={2} on={on} rot={r(12)} />
+
+        {/* ── 46.5s  Sponsor first :)  (Friend, 1.5s) ── */}
+        <WL text="Sponsor first :)" s={46500} d={1500} p={2} on={on} rot={r(13)} style={INDENT} />
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RIGHT PAGE
+// ─────────────────────────────────────────────────────────────────────────────
+function RightPage({ on }: { on: boolean }) {
+  const r = (n: number) => (((n * 11 + 3) % 9) - 4) * 0.07;
+  const gap = <div style={{ height: "clamp(3px,0.32vw,5px)" }} />;
+  const INDENT = { paddingLeft: "1.05em" } as React.CSSProperties;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: "9%", left: "54%", width: "40%", height: "82%",
+        overflow: "hidden",
+        zIndex: 10,
+      }}
+    >
+      {/* Textures live on right page */}
+      <Fingerprint />
+      <FoldedCorner />
+
+      {/* Sticky note — absolutely positioned in right page space */}
+      <StickyNote on={on} />
+
+      <div style={{ paddingLeft: "3%", paddingRight: "4%", paddingTop: "1%" }}>
+
+        {/* ── 50.5s  Volunteers  (Onkar, 1.8s) ── */}
+        <WL text="Volunteers" s={50500} d={1800} p={1} on={on} rot={r(1)} />
+
+        {/* ── 52.8s  RVCE?  (Onkar, 1.0s) + cross-out at 54.0s ── */}
+        <div style={{ position: "relative", display: "inline-block" }}>
+          <WL
+            text="RVCE?"
+            s={52800} d={1000} p={1} on={on} rot={r(2)}
+            style={{ display: "inline-block", opacity: 0.72 }}
+          />
+          <CrossOut at={54000} dur={300} on={on} />
+        </div>
+
+        {/* ── 54.6s  IIIT-B  (Friend, 1.0s) ── */}
+        <WL text="IIIT-B" s={54600} d={1000} p={2} on={on} rot={r(3)} />
+
+        {/* ── 56.0s  ↓ Sumedha can coordinate.  (Onkar, 2.4s) ── */}
+        <WL text="\u2193 Sumedha can coordinate." s={56000} d={2400} p={1} on={on} rot={r(4)} />
+
+        {/* Vertical breathing space while margin note appears (61–64s) */}
+        <div style={{ height: "clamp(5px,0.5vw,8px)" }} />
+        <div style={{ height: "clamp(5px,0.5vw,8px)" }} />
+
+        {/* ── 66.5s  Extension boards.  (Onkar, 1.6s) + oval at 68.6s ── */}
+        <div style={{ position: "relative", display: "inline-block", marginBottom: "0.5px" }}>
+          <WL
+            text="Extension boards."
+            s={66500} d={1600} p={1} on={on} rot={r(5)}
+            style={{ display: "inline-block" }}
+          />
+          <RoughOval at={68600} dur={800} on={on} />
+        </div>
+
+        {/* ── 70.0s  Don't trust the venue :(  (Friend, 2.2s) ── */}
+        <WL text="Don\u2019t trust the venue :(" s={70000} d={2200} p={2} on={on} rot={r(6)} />
+
+        {gap}
+
+        {/* ── 75.0s  Wi-Fi backup?  (Onkar, 1.7s) ── */}
+        <WL text="Wi-Fi backup?" s={75000} d={1700} p={1} on={on} rot={r(7)} />
+
+        {/* ── 77.2s  → Onkar hotspot?  (Onkar, 2.0s) + cross-out at 79.6s ── */}
+        <div style={{ position: "relative", display: "inline-block" }}>
+          <WL
+            text="\u2192 Onkar hotspot?"
+            s={77200} d={2000} p={1} on={on} rot={r(8)}
+            style={{ display: "inline-block", opacity: 0.72 }}
+          />
+          <CrossOut at={79600} dur={400} on={on} />
+        </div>
+
+        {/* ── 80.2s  No :)  (Friend, 1.0s) ── */}
+        <WL text="No :)" s={80200} d={1000} p={2} on={on} rot={r(9)} />
+
+        {gap}
+
+        {/* ── 84.0s  Registration closes Friday.  (Onkar, 2.3s) + underline 86.8s ── */}
+        <div>
+          <WL text="Registration closes Friday." s={84000} d={2300} p={1} on={on} rot={r(10)} />
+          <Underline at={86800} dur={400} on={on} />
+        </div>
+
+        {/* Gap while sticky note writes (88–90s) */}
+        <div style={{ height: "clamp(12px,1.4vw,20px)" }} />
+
+        {/* ── 95.0s  We're ready.  (Onkar, 2.5s) ── */}
+        <WL text="We\u2019re ready." s={95000} d={2500} p={1} on={on} rot={r(11)} />
+
+        {gap}
+
+        {/* ── 105.0s  Next event...  (Onkar, 2.8s, slightly faded) ── */}
+        <WL
+          text="Next event..."
+          s={105000} d={2800} p={1} on={on} rot={r(12)}
+          style={{ color: "rgba(237,231,219,0.42)" }}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ROOT EXPORT
+// ─────────────────────────────────────────────────────────────────────────────
 export default function NotebookOverlay() {
   const [on, setOn] = useState(false);
 
-  // Animation begins exactly once, 1 second after mount
+  // Start immediately. All character delays start at ≥ 3000ms,
+  // so the spec's "0–2.8s silence" is implicit in the timing.
+  // No loop. No restart. The notebook stays exactly as written.
   useEffect(() => {
-    const t = setTimeout(() => setOn(true), 1000);
-    return () => clearTimeout(t);
+    setOn(true);
   }, []);
-
-  // Entry gap
-  const E: React.CSSProperties = { marginBottom: "clamp(5px, 0.5vw, 8px)" };
 
   return (
     <>
-      {/* Inject keyframes into document */}
       <style dangerouslySetInnerHTML={{ __html: KF }} />
 
       {/*
-        ── Overlay geometry ──────────────────────────────────────────────────
-        notebook.png is 1024 × 1536 (exactly 2:3).
-        The wrapper container is aspect-[2/3] so the image fills it with no
-        letterboxing — overlay % coordinates map directly to image pixels.
-
-        Right page visual bounds (measured from the PNG):
-          Spine:       ~50% (512px)
-          Right edge:  ~96% (983px)
-          Top paper:   ~8%  (123px)
-          Bottom paper:~92% (1412px)
-
-        Content area with specified margins:
-          48px top margin:  8% + 3.1% = ~11.5% → use 12%
-          40px outer margin: 96% - 2.6% = ~93%  → right edge at 93%
-          Inner gutter (larger, fold side): 50% + 4% = ~54%
-          Content width: 93% - 54% = 39% → use 38% (keeps breathing room)
-          Content height: 92% - 12% = 80% → use 76%
+        Full-notebook overlay — covers the entire aspect-[2/3] container.
+        overflow:hidden clips EVERYTHING (text + doodles) to notebook bounds.
+        No rotation here (spec: "Do not rotate it").
       */}
       <div
-        className="absolute select-none pointer-events-none overflow-hidden"
-        style={{
-          top: "12%",
-          left: "54%",
-          width: "38%",
-          height: "76%",
-          zIndex: 20,
-        }}
+        className="absolute inset-0 select-none pointer-events-none"
+        style={{ zIndex: 20, overflow: "hidden" }}
       >
-        {/* ── Margin notes — absolutely positioned on right edge ── */}
-        {MARGIN.map((n) => (
-          <span
-            key={n.text}
-            style={{
-              position: "absolute",
-              right: "1%",
-              top: n.top,
-              fontFamily: F1,
-              fontSize: "clamp(5px, 0.5vw, 7px)",
-              color: MARGIN_COLOR,
-              transform: `rotate(${n.rot}deg)`,
-              transformOrigin: "right center",
-              whiteSpace: "nowrap",
-              ...wr(n.at, n.dur, on),
-            }}
-          >
-            {n.text}
-            {n.arrow && <TinyArrow at={n.at + n.dur + 200} on={on} />}
-          </span>
-        ))}
+        {/* Margin note lives in notebook-coordinate space */}
+        <MarginNote on={on} />
 
-        {/* ── Story — flex column, content stacks top-to-bottom ── */}
-        <div
-          style={{
-            paddingLeft: "9%",
-            paddingRight: "13%",
-            paddingTop: "2%",
-            paddingBottom: "1%",
-          }}
-        >
-
-          {/* ══ March 2 ══ */}
-          <div style={E}>
-            {/* Date — Person 1 */}
-            <span style={{ ...ds(-0.2), ...wr(0, 240, on) }}>March 2</span>
-            {/* Tasks — Person 1 */}
-            <span style={{ ...ls(0.4), ...wr(380, 560, on) }}>
-              Need a photographer
-            </span>
-            <span style={{ ...ls(-0.3), ...wr(1050, 690, on) }}>
-              for the founders meetup.
-            </span>
-            {/* Confirmation — Person 2 */}
-            <CheckRow
-              boxAt={2640}
-              markAt={3000}
-              textAt={3410}
-              textDur={640}
-              text="Found through Sumedha."
-              rot={0.3}
-              on={on}
-            />
-          </div>
-
-          {/* ══ March 5 ══ */}
-          <div style={E}>
-            <span style={{ ...ds(-0.1), ...wr(5350, 240, on) }}>March 5</span>
-            <span style={{ ...ls(0.5), ...wr(5700, 640, on) }}>
-              Looking for an AV team
-            </span>
-            <span style={{ ...ls(-0.4), ...wr(6450, 560, on) }}>
-              for the main stage.
-            </span>
-            <CheckRow
-              boxAt={7900}
-              markAt={8260}
-              textAt={8670}
-              textDur={550}
-              text="Connected by Onkar."
-              rot={0.6}
-              on={on}
-            />
-          </div>
-
-          {/* ══ March 7 ══ */}
-          <div style={E}>
-            <span style={{ ...ds(0.2), ...wr(10550, 240, on) }}>March 7</span>
-            <span style={{ ...ls(-0.3), ...wr(10890, 460, on) }}>
-              Speaker arriving
-            </span>
-            <span style={{ ...ls(0.5), ...wr(11450, 350, on) }}>
-              from Mumbai.
-            </span>
-            <span style={{ ...ls(-0.2), ...wr(11900, 590, on) }}>
-              Needs accommodation.
-            </span>
-            <CheckRow
-              boxAt={13390}
-              markAt={13750}
-              textAt={14160}
-              textDur={580}
-              text="Sriya knows a place."
-              rot={0.35}
-              on={on}
-            />
-          </div>
-
-          {/* ══ March 10 ══ */}
-          <div style={E}>
-            <span style={{ ...ds(-0.4), ...wr(16200, 265, on) }}>March 10</span>
-            <span style={{ ...ls(0.35), ...wr(16570, 680, on) }}>
-              Coffee with Navaneethe.
-            </span>
-            {/*
-              "Venue confirmed." has an ellipse doodle drawn around it.
-              The outer span is position:relative so the SVG can be absolute.
-              The inner span holds the text with the clip-path animation.
-            */}
-            <span style={{ position: "relative", display: "block" }}>
-              <span style={{ ...ls(-0.1), ...wr(17360, 460, on) }}>
-                Venue confirmed.
-              </span>
-              <EllipseDoodle at={18150} on={on} />
-            </span>
-          </div>
-
-          {/* ══ March 13 ══ */}
-          <div style={E}>
-            <span style={{ ...ds(0.3), ...wr(19900, 265, on) }}>March 13</span>
-            <span style={{ ...ls(-0.2), ...wr(20270, 430, on) }}>
-              Need volunteers
-            </span>
-            <span style={{ ...ls(0.6), ...wr(20810, 520, on) }}>
-              for registrations.
-            </span>
-            <CheckRow
-              boxAt={22230}
-              markAt={22590}
-              textAt={23000}
-              textDur={870}
-              text="Atharva shared three contacts."
-              rot={0.25}
-              on={on}
-            />
-          </div>
-
-          {/* ══ March 16 ══ */}
-          <div>
-            <span style={{ ...ds(-0.3), ...wr(25200, 265, on) }}>March 16</span>
-            <span style={{ ...ls(0.5), ...wr(25570, 550, on) }}>
-              Everything&apos;s ready.
-            </span>
-            {/* Curved underline drawn beneath */}
-            <CurvedUnderline at={26380} on={on} />
-          </div>
-
-          {/* ══ Next event... — small afterthought, bottom-right ══ */}
-          <div
-            style={{
-              marginTop: "clamp(3px, 0.3vw, 5px)",
-              paddingLeft: "35%",
-            }}
-          >
-            <span
-              style={{
-                display: "inline-block",
-                fontFamily: F1,
-                fontSize: "clamp(6.5px, 0.62vw, 8.5px)",
-                color: LAST_COLOR,
-                transform: "rotate(0.8deg)",
-                transformOrigin: "left center",
-                letterSpacing: "0.04em",
-                ...wr(27150, 380, on),
-              }}
-            >
-              Next event...
-            </span>
-          </div>
-
-        </div>
+        <LeftPage  on={on} />
+        <RightPage on={on} />
       </div>
     </>
   );
