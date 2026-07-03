@@ -247,7 +247,7 @@ function PhoneDoodle({ at, dur, on }: { at: number; dur: number; on: boolean }) 
     >
       <path
         d="M 3,1 C 2.2,1 1.5,1.8 1.5,2.8 L 1.5,4.5 C 2,6.1 3,7 4.5,7.5 C 5.1,7.7 5.6,7.5 6,7 L 6.4,6.5 C 7,5.9 7.5,6 8,6.5 L 9,7.6 C 9.5,8.1 9.5,8.6 9,9.1 L 8.5,9.6 C 8,10.1 7.8,10.9 8.1,11.5 C 8.7,11.5 9.3,11.2 9.7,10.8 C 10.6,9.8 11,8.8 11,7.8 C 11,5.8 9.5,4.2 8.5,3.2 C 7.5,2.2 5.9,1.3 4.4,1.1 C 3.9,1.03 3.4,1 3,1 Z"
-        stroke="rgba(196,154,98,0.45)"
+        stroke="rgba(196,154,98,0.7)"
         strokeWidth="0.7"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -343,9 +343,10 @@ function StickyNote({ on }: { on: boolean }) {
       style={{
         position: "absolute", top: "50%", left: "67%",
         width: "clamp(46px,5.2vw,68px)",
-        background: "rgba(224, 192, 131, 0.95)",
+        background: "linear-gradient(135deg, rgba(230,202,146,0.95) 0%, rgba(214,180,117,0.95) 100%)",
         border: "0.5px solid rgba(0,0,0,0.1)",
-        borderRadius: "1px",
+        borderRadius: "2px 8px 2px 12px / 2px 12px 4px 20px",
+        clipPath: "polygon(1% 0, 100% 1%, 98% 100%, 0 99%)",
         padding: "clamp(3px,0.35vw,5px) clamp(4px,0.45vw,6px)",
         pointerEvents: "none",
         zIndex: 25,
@@ -402,10 +403,10 @@ function MarginNote({ on }: { on: boolean }) {
   return (
     <div
       style={{
-        position: "absolute", top: "27%", left: "51.5%",
+        position: "absolute", top: "27%", left: "53%",
         fontFamily: F1,
         fontSize: FS_MARGIN,
-        color: "rgba(237,231,219,0.24)",
+        color: "rgba(237,231,219,0.55)",
         transform: "rotate(-0.9deg)",
         lineHeight: 1.4,
         whiteSpace: "nowrap",
@@ -614,7 +615,7 @@ function RightPage({ on }: { on: boolean }) {
           paddingLeft: "3%",
           paddingRight: "4%",
           paddingTop: "12%",
-          transform: "rotate(-5deg)",
+          transform: "rotate(-6.5deg)",
           transformOrigin: "top left",
         }}
       >
@@ -678,7 +679,9 @@ function RightPage({ on }: { on: boolean }) {
         {/* ── 84.0s  Registration closes Friday.  (Onkar, 2.3s) + underline 86.8s ── */}
         <div>
           <WL text="Registration closes Friday." s={84000} d={2300} p={1} on={on} rot={r(10)} />
-          <Underline at={86800} dur={400} on={on} />
+          <div style={{ width: "80%" }}>
+            <Underline at={86800} dur={400} on={on} />
+          </div>
         </div>
 
         {/* Gap while sticky note writes (88–90s) */}
