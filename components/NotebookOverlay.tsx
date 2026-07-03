@@ -26,11 +26,11 @@ const F1 = "var(--font-shadows-into-light), 'Shadows Into Light', cursive";
 // Person 2 — Friend (Patrick Hand: casual, rounder, warm)
 const F2 = "var(--font-patrick-hand), 'Patrick Hand', cursive";
 
-const FS1      = "clamp(6px, 0.65vw, 8.5px)";   // body — person 1
-const FS2      = "clamp(5.5px, 0.6vw, 8px)";    // body — person 2
-const FS_HEAD  = "clamp(8px, 0.85vw, 11px)";    // static heading
-const FS_SUB   = "clamp(5.5px, 0.6vw, 8px)";    // static sub-lines
-const FS_MARGIN = "clamp(4.5px, 0.5vw, 6.5px)"; // margin note
+const FS1      = "clamp(9px, 0.95vw, 12.5px)";   // body — person 1
+const FS2      = "clamp(8.5px, 0.9vw, 12px)";    // body — person 2
+const FS_HEAD  = "clamp(12px, 1.3vw, 17px)";     // static heading
+const FS_SUB   = "clamp(9px, 0.9vw, 12px)";      // static sub-lines
+const FS_MARGIN = "clamp(5.5px, 0.52vw, 7px)";   // margin note
 
 const INK1 = "rgba(237,231,219,0.91)";   // warm white   — Onkar
 const INK2 = "rgba(196,154, 98,0.88)";   // warm gold    — Friend
@@ -262,7 +262,7 @@ function CoffeeStain() {
   return (
     <div
       style={{
-        position: "absolute", bottom: "14%", left: "3.5%",
+        position: "absolute", bottom: "3%", left: "-1%",
         width: "clamp(25px,2.9vw,38px)", height: "clamp(25px,2.9vw,38px)",
         borderRadius: "50%",
         border: "1.5px solid rgba(101,67,33,0.13)",
@@ -277,7 +277,7 @@ function GraphiteSmudge() {
   return (
     <div
       style={{
-        position: "absolute", top: "72%", left: "11%",
+        position: "absolute", bottom: "25%", left: "5%",
         width: "clamp(20px,2.3vw,32px)", height: "clamp(7px,0.8vw,10px)",
         borderRadius: "50%",
         background: "rgba(188,188,188,0.04)",
@@ -295,7 +295,7 @@ function Fingerprint() {
       viewBox="0 0 26 32"
       fill="none"
       style={{
-        position: "absolute", top: "61%", right: "4%",
+        position: "absolute", top: "72%", right: "2%",
         width: "clamp(15px,1.7vw,22px)", height: "clamp(19px,2.1vw,28px)",
         opacity: 0.045,
         transform: "rotate(8deg)",
@@ -318,7 +318,7 @@ function FoldedCorner() {
   return (
     <div
       style={{
-        position: "absolute", bottom: "2.5%", right: "1.5%",
+        position: "absolute", bottom: "0%", right: "0%",
         width: "clamp(10px,1.2vw,16px)", height: "clamp(10px,1.2vw,16px)",
         background: "linear-gradient(225deg,rgba(44,35,27,0.55) 0%,rgba(37,29,22,0.28) 45%,transparent 72%)",
         clipPath: "polygon(100% 0,100% 100%,0 100%)",
@@ -332,16 +332,16 @@ function FoldedCorner() {
 // STICKY NOTE  (tape static, handwriting animated)
 // ─────────────────────────────────────────────────────────────────────────────
 function StickyNote({ on }: { on: boolean }) {
-  const fs = "clamp(5px,0.55vw,7px)";
+  const fs = "clamp(6px,0.6vw,8.5px)";
   return (
     <div
       style={{
-        position: "absolute", top: "37%", left: "67%",
-        width: "clamp(40px,4.5vw,60px)",
+        position: "absolute", top: "50%", left: "67%",
+        width: "clamp(46px,5.2vw,68px)",
         background: "rgba(242,233,212,0.07)",
         border: "0.5px solid rgba(242,233,212,0.06)",
         borderRadius: "1px",
-        padding: "clamp(3px,0.3vw,5px) clamp(4px,0.4vw,6px)",
+        padding: "clamp(3px,0.35vw,5px) clamp(4px,0.45vw,6px)",
         transform: "rotate(2.2deg)",
         pointerEvents: "none",
         zIndex: 25,
@@ -368,7 +368,7 @@ function StickyNote({ on }: { on: boolean }) {
         {/* Small star */}
         <div
           style={{
-            fontSize: "clamp(4px,0.4vw,5px)",
+            fontSize: "clamp(5px,0.5vw,6px)",
             color: "rgba(196,154,98,0.30)",
             marginTop: "2px",
             display: "block",
@@ -396,7 +396,7 @@ function MarginNote({ on }: { on: boolean }) {
   return (
     <div
       style={{
-        position: "absolute", top: "17%", left: "50.5%",
+        position: "absolute", top: "27%", left: "51.5%",
         fontFamily: F1,
         fontSize: FS_MARGIN,
         color: "rgba(237,231,219,0.24)",
@@ -478,7 +478,7 @@ function StaticContent() {
         />
       </div>
 
-      <div style={{ height: "clamp(5px,0.5vw,8px)" }} />
+      <div style={{ height: "clamp(6px,0.6vw,10px)" }} />
     </div>
   );
 }
@@ -489,14 +489,14 @@ function StaticContent() {
 function LeftPage({ on }: { on: boolean }) {
   // Deterministic micro-rotation per line (feels handwritten, not robotic)
   const r = (n: number) => (((n * 7) % 9) - 4) * 0.07;
-  const gap = <div style={{ height: "clamp(2px,0.25vw,4px)" }} />;
+  const gap = <div style={{ height: "clamp(2px,0.25vw,5px)" }} />;
   const INDENT = { paddingLeft: "1.05em" } as React.CSSProperties;
 
   return (
     <div
       style={{
         position: "absolute",
-        top: "12%", left: "10%", width: "36%", height: "76%",
+        top: "25.5%", left: "15%", width: "37%", height: "48%",
         overflow: "hidden",
         zIndex: 10,
       }}
@@ -505,7 +505,7 @@ function LeftPage({ on }: { on: boolean }) {
       <CoffeeStain />
       <GraphiteSmudge />
 
-      <div style={{ paddingLeft: "5%", paddingRight: "3%", paddingTop: "1%" }}>
+      <div style={{ paddingLeft: "5%", paddingRight: "3%", paddingTop: "2%" }}>
         {/* ── Static ── */}
         <StaticContent />
 
@@ -577,14 +577,14 @@ function LeftPage({ on }: { on: boolean }) {
 // ─────────────────────────────────────────────────────────────────────────────
 function RightPage({ on }: { on: boolean }) {
   const r = (n: number) => (((n * 11 + 3) % 9) - 4) * 0.07;
-  const gap = <div style={{ height: "clamp(2px,0.25vw,4px)" }} />;
+  const gap = <div style={{ height: "clamp(2px,0.25vw,5px)" }} />;
   const INDENT = { paddingLeft: "1.05em" } as React.CSSProperties;
 
   return (
     <div
       style={{
         position: "absolute",
-        top: "12%", left: "54%", width: "36%", height: "76%",
+        top: "25.5%", left: "54.5%", width: "37%", height: "48%",
         overflow: "hidden",
         zIndex: 10,
       }}
@@ -596,7 +596,7 @@ function RightPage({ on }: { on: boolean }) {
       {/* Sticky note — absolutely positioned in right page space */}
       <StickyNote on={on} />
 
-      <div style={{ paddingLeft: "3%", paddingRight: "4%", paddingTop: "1%" }}>
+      <div style={{ paddingLeft: "3%", paddingRight: "4%", paddingTop: "2%" }}>
 
         {/* ── 50.5s  Volunteers  (Onkar, 1.8s) ── */}
         <WL text="Volunteers" s={50500} d={1800} p={1} on={on} rot={r(1)} />
@@ -661,7 +661,7 @@ function RightPage({ on }: { on: boolean }) {
         </div>
 
         {/* Gap while sticky note writes (88–90s) */}
-        <div style={{ height: "clamp(10px,1.2vw,16px)" }} />
+        <div style={{ height: "clamp(8px,1vw,14px)" }} />
 
         {/* ── 95.0s  We're ready.  (Onkar, 2.5s) ── */}
         <WL text="We’re ready." s={95000} d={2500} p={1} on={on} rot={r(11)} />
