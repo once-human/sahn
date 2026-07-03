@@ -91,18 +91,6 @@ export default function Hero() {
           </AnimatePresence>
         </div>
 
-        <nav className="hidden lg:flex items-center gap-10 font-sans text-[12px] pointer-events-auto text-[#A79D95]">
-          <a href="#" className="opacity-60 hover:opacity-100 transition-opacity">
-            About
-          </a>
-          <a
-            href="#"
-            className="flex items-center gap-[8px] border border-[rgba(199,160,106,0.35)] px-[18px] py-[10px] rounded-full hover:border-[rgba(199,160,106,0.6)] transition-colors duration-300"
-          >
-            <span className="opacity-80 text-[#F5F1EB]">Get in Touch</span>
-            <span className="w-[4px] h-[4px] rounded-full bg-[#C7A06A] block" />
-          </a>
-        </nav>
       </motion.header>
 
       {/* ── Main Content ── */}
