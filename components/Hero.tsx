@@ -116,19 +116,6 @@ export default function Hero() {
         <div className="font-sans text-[11px] uppercase tracking-[0.65em] font-medium text-[#F4EEE7]">
           S A H N
         </div>
-
-        <nav className="hidden lg:flex items-center gap-10 font-sans text-[15px] text-[#F4EEE7]">
-          <a href="#" className="opacity-70 hover:opacity-100 transition-opacity">
-            About
-          </a>
-          <a
-            href="#"
-            className="flex items-center gap-[6px] border border-[rgba(201,164,112,0.35)] px-[16px] py-[10px] rounded-[10px] hover:border-[rgba(201,164,112,0.7)] transition-colors duration-300"
-          >
-            <span className="opacity-90">We&apos;re in Pune/BLR</span>
-            <span className="w-[5px] h-[5px] rounded-full bg-[#C9A470] block ml-1" />
-          </a>
-        </nav>
       </motion.header>
 
       {/* ── Main Content ── */}
@@ -158,24 +145,6 @@ export default function Hero() {
               </motion.p>
             ))}
           </div>
-          
-          <motion.div 
-            initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ delay: 0.9, duration: 0.8 }}
-            className="mt-10"
-          >
-            <a href="#" className="group inline-flex items-center text-[#F3ECE5] text-[15px] font-medium relative">
-              <span className="relative pb-1">
-                We&apos;re in Pune/BLR
-                {/* Underline begins underneath text only, expands on hover */}
-                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#F2ECE5]/30 origin-left transition-transform duration-400 ease-out group-hover:scale-x-110" />
-              </span>
-              <span className="ml-4 transform transition-transform duration-400 ease-out group-hover:translate-x-[4px] inline-block font-serif text-lg pb-1">
-                →
-              </span>
-            </a>
-          </motion.div>
         </div>
 
         {/* Right Column — Notebook */}

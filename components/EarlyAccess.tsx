@@ -43,7 +43,7 @@ export default function EarlyAccess() {
           Starting with Pune and Bengaluru.
         </h2>
         <p className="text-[15px] text-[#F3ECE5] opacity-[58%] mb-12">
-          Get early access and be part of the first community.
+          Be part of the first community.
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row items-center justify-center gap-6 max-w-[500px] mx-auto relative">
@@ -70,7 +70,7 @@ export default function EarlyAccess() {
             className="group inline-flex items-center text-[#F3ECE5] text-[15px] font-medium relative pt-2"
           >
             <span className="relative pb-1">
-              {status === "loading" ? "Joining..." : status === "success" ? "Joined" : "Join early access"}
+              {status === "loading" ? "Joining..." : status === "success" ? "Joined" : "Join waitlist"}
               {status === "idle" && (
                 <span className="absolute bottom-0 left-0 w-full h-[1px] bg-[#F3ECE5]/30 origin-left transition-transform duration-400 ease-out group-hover:scale-x-110" />
               )}
