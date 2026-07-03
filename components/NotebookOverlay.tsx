@@ -138,6 +138,15 @@ function WL({ text, s, d, p, on, rot = 0, style }: WLProps) {
 
 /** CSS style for animated SVG stroke (drives drawStroke keyframe). */
 function da(at: number, dur: number, dash: number, on: boolean): React.CSSProperties {
+  return {
+    strokeDasharray : dash,
+    strokeDashoffset: dash,
+    animation       : on ? `drawStroke ${dur}ms ease ${at}ms both` : "none",
+  } as React.CSSProperties;
+}
+
+// ── Imperfect circle (ClayWorks) ─────────────────────────────────────────────
+function RoughCircle({ at, dur, on }: { at: number; dur: number; on: boolean }) {
   return (
     <svg
       viewBox="0 0 110 28"
