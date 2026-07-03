@@ -111,7 +111,7 @@ export default function Hero() {
         initial={{ opacity: 0, y: -18, filter: "blur(10px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute top-0 left-0 w-full flex items-center justify-between px-6 lg:px-12 pt-8 lg:pt-14 pb-8 z-50 max-w-[1600px] mx-auto right-0"
+        className="absolute top-0 left-0 w-full flex items-center justify-between px-12 lg:px-[12%] pt-8 lg:pt-14 pb-8 z-50 max-w-[1600px] mx-auto right-0"
       >
         <div className="font-sans text-[11px] uppercase tracking-[0.65em] font-medium text-[#F4EEE7]">
           S A H N
