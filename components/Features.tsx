@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Features() {
   return (
-    <section className="w-full bg-transparent text-[#F2ECE5] px-12 py-32 flex flex-col items-center">
+    <section className="w-full bg-gradient-to-b from-[#11100E] to-[#0D0D0D] border-b border-[#3A2E25]/30 text-[#F2ECE5] px-12 py-32 flex flex-col items-center">
       <div className="w-full max-w-[1200px]">
         <h2 className="font-serif text-[2.5rem] leading-[1.2] font-medium tracking-tight mb-24">
           Built on trust. Designed for people.
@@ -14,7 +14,7 @@ export default function Features() {
             <div className="mb-8 h-12 flex items-center justify-center">
               <svg 
                 width="36" height="36" viewBox="0 0 24 24" 
-                fill="none" stroke="#E5D2BA" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"
+                fill="none" stroke="#C8A97E" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"
               >
                 <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
                 <circle cx="9" cy="7" r="4" />
@@ -33,7 +33,7 @@ export default function Features() {
             <div className="mb-8 h-12 flex items-center justify-center">
               <svg 
                 width="32" height="36" viewBox="0 0 24 24" 
-                fill="none" stroke="#E5D2BA" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"
+                fill="none" stroke="#C8A97E" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"
               >
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               </svg>
@@ -49,7 +49,7 @@ export default function Features() {
             <div className="mb-8 h-12 flex items-center justify-center">
               <svg 
                 width="34" height="34" viewBox="0 0 24 24" 
-                fill="none" stroke="#E5D2BA" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"
+                fill="none" stroke="#C8A97E" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"
               >
                 <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
               </svg>

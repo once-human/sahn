@@ -55,10 +55,10 @@ export default function Hero() {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 w-full flex flex-col lg:flex-row mt-24 lg:mt-0">
+      <div className="flex-1 w-full flex flex-col lg:flex-row mt-24 lg:mt-0 border-b border-[#3A2E25]/30 bg-[#0D0D0D]">
         
         {/* Left Column */}
-        <div className="w-full lg:w-[42%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-[5%] pt-10 lg:pb-0 pb-12 z-10">
+        <div className="w-full lg:w-[45%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-[5%] pt-10 lg:pb-0 pb-12 z-10 relative">
           <h1 className="font-serif text-[#F2ECE5] text-[4.5rem] leading-[1.02] font-medium tracking-tight mb-6">
             Every great<br />
             event begins<br />
@@ -87,10 +87,10 @@ export default function Hero() {
         </div>
         
         {/* Right Column */}
-        <div className="w-full lg:w-[58%] h-[60vh] lg:h-full relative flex items-center justify-center pt-8 pb-16 lg:pb-0">
+        <div className="w-full lg:w-[55%] h-[60vh] lg:h-full relative flex items-center justify-center pt-8 pb-16 lg:pb-0">
           <motion.div 
             style={{ x, y }} 
-            className="relative w-[95%] max-w-[900px] aspect-[4/3] flex-shrink-0 -ml-[5%] -mt-[2%]"
+            className="absolute lg:-right-[5%] lg:-top-[5%] w-[150%] lg:w-[175%] max-w-[1400px] aspect-[4/3] flex-shrink-0 z-0 pointer-events-none"
           >
             <motion.div
               animate={{ y: [-2, 2, -2] }}

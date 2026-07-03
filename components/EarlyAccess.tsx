@@ -37,7 +37,7 @@ export default function EarlyAccess() {
   };
 
   return (
-    <section className="w-full bg-transparent text-[#F2ECE5] px-12 py-32 flex flex-col items-center justify-center">
+    <section className="w-full bg-[#0D0D0D] border-b border-[#3A2E25]/30 text-[#F2ECE5] px-12 py-32 flex flex-col items-center justify-center">
       <div className="w-full max-w-[600px] text-center">
         <h2 className="font-serif text-[2.5rem] leading-[1.2] font-medium tracking-tight mb-4">
           Starting with Pune and Bengaluru.
