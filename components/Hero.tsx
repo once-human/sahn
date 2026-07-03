@@ -115,9 +115,10 @@ export default function Hero() {
       >
 
         {/* Left Column */}
-        <div className="w-full lg:w-[45%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-[5%] pt-10 lg:pb-0 pb-12 z-20">
-          <h1 className="font-serif text-[#F5F1EB] text-[72px] lg:text-[80px] leading-[1.05] font-medium tracking-tight w-full sm:w-[120%] lg:w-[140%] max-w-[800px]">
-            Structured Vendor <span className="text-[#C7A06A]">Sourcing</span> for Events
+        <div className="w-full lg:w-[60%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-0 pt-10 lg:pb-0 pb-12 z-0 relative">
+          <h1 className="font-serif text-[#F5F1EB] text-[52px] lg:text-[76px] leading-[1.0] font-medium tracking-tighter w-full sm:w-[120%] lg:w-[110%] max-w-[800px] drop-shadow-md">
+            Structured Vendor <br />
+            <span className="text-[#C7A06A]">Sourcing</span> for Events
           </h1>
 
           <div className="flex flex-col font-sans max-w-[32rem] mt-14">
@@ -132,7 +133,7 @@ export default function Hero() {
         </div>
 
         {/* Right Column — Notebook */}
-        <div className="w-full lg:w-[55%] h-[60vh] lg:h-full relative flex items-center justify-center pt-8 pb-16 lg:pb-0 z-10">
+        <div className="w-full lg:w-[55%] h-[60vh] lg:h-full relative flex items-center justify-center pt-8 pb-16 lg:pb-0 z-20 lg:-ml-[15%]">
           {/*
             Parallax outer wrapper.
             aspect-[2/3] matches notebook.png exactly (1024×1536).
