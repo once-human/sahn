@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 // CSS KEYFRAMES
 // charReveal  — left-to-right clip sweep, one character at a time (pen feel)
 // drawStroke  — SVG stroke-dashoffset → 0 (doodles, circles, underlines)
+// pasteSticky — drop and rotate into view
 // ─────────────────────────────────────────────────────────────────────────────
 const KF = `
 @keyframes charReveal {
@@ -14,6 +15,10 @@ const KF = `
 }
 @keyframes drawStroke {
   to   { stroke-dashoffset: 0; }
+}
+@keyframes pasteSticky {
+  0% { opacity: 0; transform: scale(1.2) rotate(10deg) translateY(-20px); filter: drop-shadow(10px 15px 15px rgba(0,0,0,0.4)); }
+  100% { opacity: 1; transform: scale(1) rotate(2.2deg) translateY(0); filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.3)); }
 }
 `;
 
@@ -338,14 +343,13 @@ function StickyNote({ on }: { on: boolean }) {
       style={{
         position: "absolute", top: "50%", left: "67%",
         width: "clamp(46px,5.2vw,68px)",
-        background: "rgba(255, 247, 214, 0.95)",
+        background: "rgba(224, 192, 131, 0.95)",
         border: "0.5px solid rgba(0,0,0,0.1)",
-        boxShadow: "2px 4px 8px rgba(0,0,0,0.3)",
         borderRadius: "1px",
         padding: "clamp(3px,0.35vw,5px) clamp(4px,0.45vw,6px)",
-        transform: "rotate(2.2deg)",
         pointerEvents: "none",
         zIndex: 25,
+        animation: on ? "pasteSticky 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 86800ms both" : "none",
       }}
     >
       {/* Tape strip — static, never animated */}
@@ -510,7 +514,7 @@ function LeftPage({ on }: { on: boolean }) {
         style={{
           paddingLeft: "13%",
           paddingRight: "1%",
-          paddingTop: "12%",
+          paddingTop: "15%",
           transform: "rotate(-7deg)",
           transformOrigin: "top left",
         }}
@@ -609,8 +613,8 @@ function RightPage({ on }: { on: boolean }) {
         style={{
           paddingLeft: "3%",
           paddingRight: "4%",
-          paddingTop: "6%",
-          transform: "rotate(-2deg)",
+          paddingTop: "12%",
+          transform: "rotate(-5deg)",
           transformOrigin: "top left",
         }}
       >
