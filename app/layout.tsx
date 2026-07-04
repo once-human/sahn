@@ -28,8 +28,13 @@ const shadowsIntoLight = Shadows_Into_Light({
 });
 
 export const metadata: Metadata = {
-  title: "SAHN",
+  title: "Sahn",
   description: "Vendor discovery for events. Bengaluru and Pune.",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+  },
 };
 
 export default function RootLayout({
