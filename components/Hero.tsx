@@ -103,10 +103,12 @@ export default function Hero() {
       >
 
         {/* Left Column */}
-        <div className="w-full lg:w-[60%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-0 pt-10 lg:pb-0 pb-12 z-0 relative">
-          <h1 className="font-serif text-[#F5F1EB] text-[52px] lg:text-[76px] leading-[1.0] font-medium tracking-tighter w-full sm:w-[120%] lg:w-[110%] max-w-[800px] drop-shadow-md">
-            Structured Vendor <br />
-            <span className="text-[#C7A06A]">Sourcing</span> for Events
+        <div className="w-full lg:w-[45%] h-auto lg:h-full flex flex-col justify-center px-12 lg:pl-[12%] lg:pr-0 pt-10 lg:pb-0 pb-12 z-10 relative">
+          <h1 className="font-serif text-[#F5F1EB] text-[64px] lg:text-[92px] leading-[0.95] font-medium tracking-tight drop-shadow-md">
+            Structured <br />
+            Vendor <br />
+            <span className="text-[#C7A06A]">Sourcing</span> <br />
+            for Events
           </h1>
 
           <div className="flex flex-col font-sans max-w-[32rem] mt-14">
@@ -114,14 +116,14 @@ export default function Hero() {
               One place to source, compare and coordinate the people behind your next event.
             </p>
             
-            <p className="text-[#857A72] text-[12px] uppercase tracking-[0.18em] font-medium mt-8">
-              PHOTOGRAPHY &middot; AV &middot; VENUES &middot; PRODUCTION &middot; HOSPITALITY &middot; CATERING &middot; MERCHANDISE
+            <p className="text-[#857A72] text-[12px] uppercase tracking-[0.18em] font-medium mt-8 leading-[1.8]">
+              PHOTOGRAPHY &middot; AV &middot; VENUES &middot; PRODUCTION &middot; HOSPITALITY &middot; CATERING &middot; MERCHANDISE &middot; VOLUNTEERS
             </p>
           </div>
         </div>
 
         {/* Right Column — Notebook */}
-        <div className="w-full lg:w-[55%] h-[60vh] lg:h-full relative flex items-center justify-center pt-8 pb-16 lg:pb-0 z-20 lg:-ml-[15%]">
+        <div className="w-full lg:w-[55%] h-[60vh] lg:h-full relative flex items-center justify-center pt-8 pb-16 lg:pb-0 z-20">
           {/*
             Parallax outer wrapper.
             aspect-[2/3] matches notebook.png exactly (1024×1536).
