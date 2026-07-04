@@ -29,7 +29,7 @@ const rise = (delay: number) => ({
 const glowIn = (delay: number, duration = 3.8) => ({
   initial: { opacity: 0 },
   animate: { opacity: 1 },
-  transition: { delay, duration, ease: [0.16, 1, 0.3, 1] },
+  transition: { delay, duration, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
 });
 
 // Gradient text style — with paddingBottom to prevent descender clip
@@ -64,7 +64,7 @@ export default function MysteryPage() {
           bottom: "-25%", left: "-12%",
           width: "85vw", height: "85vw",
           background:
-            "radial-gradient(circle at 35% 65%, rgba(199,160,106,0.28) 0%, rgba(199,140,80,0.10) 38%, transparent 66%)",
+            "radial-gradient(circle at 35% 65%, rgba(199,160,106,0.17) 0%, rgba(199,140,80,0.06) 38%, transparent 66%)",
           filter: "blur(100px)",
           zIndex: 0,
         }}
@@ -78,7 +78,7 @@ export default function MysteryPage() {
           top: "-20%", right: "-18%",
           width: "65vw", height: "65vw",
           background:
-            "radial-gradient(circle, rgba(240,236,228,0.14) 0%, rgba(220,216,208,0.05) 45%, transparent 70%)",
+            "radial-gradient(circle, rgba(240,236,228,0.08) 0%, rgba(220,216,208,0.03) 45%, transparent 70%)",
           filter: "blur(110px)",
           zIndex: 0,
         }}
@@ -92,7 +92,7 @@ export default function MysteryPage() {
           top: "20%", left: "-8%",
           width: "65vw", height: "60vh",
           background:
-            "radial-gradient(ellipse at 28% 55%, rgba(199,160,106,0.18) 0%, rgba(180,140,90,0.07) 40%, transparent 66%)",
+            "radial-gradient(ellipse at 28% 55%, rgba(199,160,106,0.11) 0%, rgba(180,140,90,0.04) 40%, transparent 66%)",
           filter: "blur(80px)",
           zIndex: 0,
         }}
@@ -106,7 +106,7 @@ export default function MysteryPage() {
           top: "35%", right: "-8%",
           width: "50vw", height: "50vh",
           background:
-            "radial-gradient(ellipse at 60% 50%, rgba(110,108,140,0.10) 0%, transparent 62%)",
+            "radial-gradient(ellipse at 60% 50%, rgba(110,108,140,0.06) 0%, transparent 62%)",
           filter: "blur(90px)",
           zIndex: 0,
         }}
@@ -209,7 +209,7 @@ export default function MysteryPage() {
             color: "rgba(120,112,104,0.25)",
           }}
         >
-          2025
+          2026
         </span>
 
         <a
