@@ -29,7 +29,7 @@ const shadowsIntoLight = Shadows_Into_Light({
 
 export const metadata: Metadata = {
   title: "SAHN",
-  description: "The place where the people behind great events find each other.",
+  description: "Vendor discovery for events. Bengaluru and Pune.",
 };
 
 export default function RootLayout({
